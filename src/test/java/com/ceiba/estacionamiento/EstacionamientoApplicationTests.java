@@ -8,10 +8,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EstacionamientoApplicationTests {
-	
+
 	@Test
-	public void prueba(){
-		assert(Boolean.TRUE);
+	public void contextLoads() {
 	}
 
 }
