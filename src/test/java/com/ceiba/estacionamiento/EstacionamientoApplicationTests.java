@@ -1,4 +1,4 @@
-package com.estacionamiento.estacionamiento;
+package com.ceiba.estacionamiento;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
