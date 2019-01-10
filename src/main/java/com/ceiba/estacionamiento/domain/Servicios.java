@@ -15,6 +15,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.ceiba.estacionamiento.enums.TipoVehiculo;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "SERVICIOS")
@@ -25,6 +27,8 @@ public class Servicios implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	private TipoVehiculo tipoVehiculo;
 	
 	private String placa;
 	
@@ -84,5 +88,13 @@ public class Servicios implements Serializable{
 
 	public void setCobrado(BigDecimal cobrado) {
 		this.cobrado = cobrado;
+	}
+
+	public TipoVehiculo getTipoVehiculo() {
+		return tipoVehiculo;
+	}
+
+	public void setTipoVehiculo(TipoVehiculo tipoVehiculo) {
+		this.tipoVehiculo = tipoVehiculo;
 	}
 }
