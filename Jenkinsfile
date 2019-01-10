@@ -43,7 +43,7 @@ pipeline {
 	 	stage('Compile') {
 			steps{
 					echo "------------>Compile<------------"
-					sh 'gradle --b ./BackEnd/build.gradle compileJava'
+					sh 'gradle --b ./build.gradle compileJava'
 			}
 		}
 	
@@ -51,7 +51,7 @@ pipeline {
 			steps{
 		 			echo "------------>Unit Tests<------------"
 		 			sh 'gradle --stacktrace test'
-					junit '**/BackEnd/build/test-results/test/*.xml' //aggregate test results - JUnit
+					junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
 					step( [ $class: 'JacocoPublisher' ] )
 	 			}
 	 	}
@@ -74,7 +74,7 @@ pipeline {
 	 	stage('Build') {
 	 		steps {
 		 			echo "------------>Build<------------"
-		 			sh 'gradle --b ./BackEnd/build.gradle build -x test'
+		 			sh 'gradle --b ./build.gradle build -x test'
 	 			}
 		}
 	 }
@@ -86,7 +86,7 @@ pipeline {
 	 	
 	 	success {
 	 		echo 'This will run only if successful'
-	 		junit '**/BackEnd/build/test-results/test/*.xml'
+	 		junit '**/build/test-results/test/*.xml'
 	 	}
 	 
 	 	failure {
