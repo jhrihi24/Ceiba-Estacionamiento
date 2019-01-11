@@ -2,9 +2,16 @@ package com.ceiba.estacionamiento.dto;
 
 public class RegistrarVehiculoDTO {
 	
-	private String placa;
-	
+	private String placa;	
 	private Integer cilindraje;
+			
+	public RegistrarVehiculoDTO() {
+	}
+
+	public RegistrarVehiculoDTO(String placa, Integer cilindraje) {
+		this.placa = placa;
+		this.cilindraje = cilindraje;
+	}
 
 	public String getPlaca() {
 		return placa;
