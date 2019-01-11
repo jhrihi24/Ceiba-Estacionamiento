@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
+import com.ceiba.estacionamiento.exception.EstacionamientoException;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
 
 @RestController
 @RequestMapping("/api/estacionamiento")
-public class EstacionamientoController {
+public class EstacionamientoController extends AbstractController{
 	
 	private EstacionamientoService estacionamientoService;
 	private EstacionamientoValidation estacionamientoValidation;
@@ -25,14 +26,14 @@ public class EstacionamientoController {
 	}
 	
 	@PostMapping
-	public RespuestaDTO<String> registrarVehiculo(@RequestBody RegistrarVehiculoDTO registrarVehiculo){
+	public RespuestaDTO<String> registrarVehiculo(@RequestBody RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException{
 		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
-		String mensajeValidation= estacionamientoValidation.validarRegistroVehiculo(registrarVehiculo);
+		String mensajeValidation= estacionamientoValidation.validarCamposRegistroVehiculo(registrarVehiculo);
 		
 		if(mensajeValidation.isEmpty()){
 			estacionamientoService.registarVehiculo(registrarVehiculo);
 			respuesta.setSuccess(Boolean.FALSE);
-			respuesta.setMensaje("Vehiculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");
+			respuesta.setMensaje("El vehiculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");
 		}else{
 			respuesta.setSuccess(Boolean.FALSE);
 			respuesta.setMensaje(mensajeValidation);

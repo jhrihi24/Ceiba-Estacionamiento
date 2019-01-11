@@ -15,4 +15,14 @@ public enum TipoValidacion {
 		return this.value;
 	}
 	
+	public static TipoValidacion toTipoValidacion(Integer value) {        
+		if(value==1){
+        	return TipoValidacion.INICIO;
+        }else if(value==2){
+	        return TipoValidacion.FINAL; 
+        
+        }
+		return null;
+    }
+	
 }

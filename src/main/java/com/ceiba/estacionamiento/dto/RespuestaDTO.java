@@ -17,30 +17,30 @@ public class RespuestaDTO<T> {
 	protected T data;
 	
 	public RespuestaDTO() {	
-		this(true,0,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),null,null);
+		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),null,null);
 	}
 	
 	public RespuestaDTO(String message, T data) {
-		this(true,0,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,data);
+		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,data);
 	}
 	
 	public RespuestaDTO(String message) {
-		this(true,0,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,null);
+		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,null);
 	}
 	
 	public RespuestaDTO(String message, boolean isSuccess) {
-		this(isSuccess,0,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,null);
+		this(isSuccess,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,null);
 	}
 	
 	public RespuestaDTO(Throwable ex) {	
-		this(false,0,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),ex.getMessage(),null);
+		this(false,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),ex.getMessage(),null);
 	}
 	
 	public RespuestaDTO(T data) {
-		this(true,0,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),null,data);
+		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),null,data);
 	}
 	
-	public RespuestaDTO(boolean success, int idError, String dateTime, String message, T data) {
+	public RespuestaDTO(boolean success, String dateTime, String message, T data) {
 		this.success = success;
 		this.dateTime = dateTime;
 		this.mensaje = message;

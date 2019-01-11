@@ -15,4 +15,14 @@ public enum TipoCobro {
 		return this.value;
 	}
 	
+	public static TipoCobro toTipoCobro(Integer value) {        
+		if(value==1){
+        	return TipoCobro.HORA;
+        }else if(value==2){
+	        return TipoCobro.DIA; 
+        
+        }
+		return null;
+    }
+	
 }
