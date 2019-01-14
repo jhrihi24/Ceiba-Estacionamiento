@@ -27,16 +27,11 @@ public class EstacionamientoController extends AbstractController{
 	
 	@PostMapping
 	public RespuestaDTO<String> registrarVehiculo(@RequestBody RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException{
-		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
-		String mensajeValidation= estacionamientoValidation.validarCamposRegistroVehiculo(registrarVehiculo);
+		RespuestaDTO<String> respuesta= estacionamientoValidation.validarCamposRegistroVehiculo(registrarVehiculo);
 		
-		if(mensajeValidation.isEmpty()){
+		if(respuesta.isSuccess()){
 			estacionamientoService.registarVehiculo(registrarVehiculo);
-			respuesta.setSuccess(Boolean.FALSE);
 			respuesta.setMensaje("El vehiculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");
-		}else{
-			respuesta.setSuccess(Boolean.FALSE);
-			respuesta.setMensaje(mensajeValidation);
 		}
 		
 		return respuesta;

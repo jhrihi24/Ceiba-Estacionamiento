@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.ceiba.estacionamiento.domain.ConfiguracionesIngreso;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
+import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.enums.DiasSemana;
 import com.ceiba.estacionamiento.enums.TipoValidacion;
 import com.ceiba.estacionamiento.enums.TipoVehiculo;
@@ -17,14 +18,15 @@ import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 @Component
 public class EstacionamientoValidation {
 	
-	public String validarCamposRegistroVehiculo(RegistrarVehiculoDTO registrarVehiculo){
-		String mensaje= "";
+	public RespuestaDTO<String> validarCamposRegistroVehiculo(RegistrarVehiculoDTO registrarVehiculo){
+		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
 		
 		if(registrarVehiculo.getPlaca().isEmpty()){
-			mensaje= "Debe ingresar una placa";
+			respuesta.setMensaje("Debe ingresar una placa");
+			respuesta.setSuccess(Boolean.FALSE);
 		}		
 		
-		return mensaje;
+		return respuesta;
 	}
 	
 	public Boolean validarDiasIngresoVehiculo(String placa, TipoVehiculo tipoVehiculo, List<ConfiguracionesIngreso> configuracionesIngresoList){
@@ -44,5 +46,5 @@ public class EstacionamientoValidation {
 		
 		return Boolean.TRUE;
 	}
-	
+		
 }

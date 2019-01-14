@@ -7,19 +7,20 @@ public class EstacionamientoUtils {
 	}
 	
 	public static Boolean buscarCadenaInicio(String padre, String hijo){
-		if(padre.indexOf(hijo, 0)<0){
-			return Boolean.FALSE;
-		}else{
+		String particionString= padre.substring(0, hijo.length());
+		if(particionString.equals(hijo)){
 			return Boolean.TRUE;
+		}else{
+			return Boolean.FALSE;
 		}
 	}
 	
 	public static Boolean bucarCadenaFinal(String padre, String hijo){
 		int indiceInicial= padre.length() - hijo.length();
-		if(padre.indexOf(hijo, indiceInicial)<0){
-			return Boolean.FALSE;
-		}else{
+		if(padre.indexOf(hijo, indiceInicial)>-1){
 			return Boolean.TRUE;
+		}else{
+			return Boolean.FALSE;
 		}
 	}
 	

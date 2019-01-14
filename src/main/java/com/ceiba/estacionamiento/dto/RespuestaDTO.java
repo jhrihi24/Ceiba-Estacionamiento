@@ -19,27 +19,7 @@ public class RespuestaDTO<T> {
 	public RespuestaDTO() {	
 		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),null,null);
 	}
-	
-	public RespuestaDTO(String message, T data) {
-		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,data);
-	}
-	
-	public RespuestaDTO(String message) {
-		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,null);
-	}
-	
-	public RespuestaDTO(String message, boolean isSuccess) {
-		this(isSuccess,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),message,null);
-	}
-	
-	public RespuestaDTO(Throwable ex) {	
-		this(false,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),ex.getMessage(),null);
-	}
-	
-	public RespuestaDTO(T data) {
-		this(true,new SimpleDateFormat(DATE_FORMAT).format(Calendar.getInstance().getTime()),null,data);
-	}
-	
+		
 	public RespuestaDTO(boolean success, String dateTime, String message, T data) {
 		this.success = success;
 		this.dateTime = dateTime;
@@ -55,22 +35,6 @@ public class RespuestaDTO<T> {
 		this.success = success;
 	}
 	
-	public int getIdError() {
-		return idError;
-	}
-
-	public void setIdError(int idError) {
-		this.idError = idError;
-	}
-
-	public String getDateTime() {
-		return dateTime;
-	}
-
-	public void setDateTime(String dateTime) {
-		this.dateTime = dateTime;
-	}
-
 	public String getMensaje() {
 		return mensaje;
 	}
