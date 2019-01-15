@@ -1,6 +1,9 @@
 package com.ceiba.estacionamiento.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -8,13 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.ceiba.estacionamiento.domain.ConfiguracionesCilindraje;
+import com.ceiba.estacionamiento.domain.Precios;
 import com.ceiba.estacionamiento.domain.Servicios;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
+import com.ceiba.estacionamiento.enums.TipoCobro;
 import com.ceiba.estacionamiento.enums.TipoVehiculo;
 import com.ceiba.estacionamiento.exception.EstacionamientoException;
+import com.ceiba.estacionamiento.repository.ConfiguracionesCilindrajeRepository;
 import com.ceiba.estacionamiento.repository.ConfiguracionesIngresoRepository;
+import com.ceiba.estacionamiento.repository.PreciosRepository;
 import com.ceiba.estacionamiento.repository.ServiciosRepository;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
+import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
 
 @Service
@@ -22,6 +31,8 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	
 	private ServiciosRepository serviciosRepository;
 	private ConfiguracionesIngresoRepository configuracionesIngresoRepository;
+	private PreciosRepository preciosRepository;
+	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
 	private EstacionamientoValidation estacionamientoValidation;
 	
 	@Value("${maximo.motos}")
@@ -32,10 +43,12 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	
 	@Autowired	
 	public EstacionamientoServiceImpl(ServiciosRepository serviciosRepository, ConfiguracionesIngresoRepository configuracionesIngresoRepository, 
-			EstacionamientoValidation estacionamientoValidation) {
+			PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository) {
 		this.serviciosRepository = serviciosRepository;
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
-		this.estacionamientoValidation = estacionamientoValidation;
+		this.preciosRepository = preciosRepository;
+		this.configuracionesCilindrajeRepository= configuracionesCilindrajeRepository;
+		this.estacionamientoValidation = estacionamientoValidation;		
 	}
 
 	@Transactional
@@ -61,6 +74,49 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		servicios.setFechaHoraIngreso(new Date());
 		servicios.setTipoVehiculo(tipoVehiculo);
 		
-		serviciosRepository.save(servicios);	
+		serviciosRepository.save(servicios);
+	}
+	
+	@Transactional
+	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException{
+		Optional<Servicios> optionalServicios= serviciosRepository.findById(idServicio);
+		if(!optionalServicios.isPresent()){
+			throw new EstacionamientoException("El servicio no existe.");
+		}		
+		
+		//Realizacion del cobro normal
+		Long cantidadHoras= EstacionamientoUtils.calcularHorasEntreFechas(optionalServicios.get().getFechaHoraIngreso(), fechaActual);
+		List<Precios> preciosList= preciosRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo());
+		BigDecimal cobroTotal= new BigDecimal(0);
+		for(Precios precio: preciosList){
+			if(precio.getTipoCobro()==TipoCobro.DIA && cantidadHoras > 24){
+				cobroTotal= cobroTotal.add(EstacionamientoUtils.cobroDia(precio.getPrecio(), cantidadHoras));
+			}else if(precio.getTipoCobro()==TipoCobro.HORA){
+				cobroTotal= cobroTotal.add(EstacionamientoUtils.cobroHora(precio.getPrecio(), cantidadHoras));
+			}
+		}
+		
+		//Realizacion del cobro adicional
+		if(optionalServicios.get().getCilindraje()>0){
+			Integer mayorCilindraje=0;
+			BigDecimal cobroAdicional= new BigDecimal(0);
+			List<ConfiguracionesCilindraje> configuracionesCilindrajeList= configuracionesCilindrajeRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo());
+			for(ConfiguracionesCilindraje configuracionesCilindraje: configuracionesCilindrajeList){
+				if(optionalServicios.get().getCilindraje()>configuracionesCilindraje.getCilindraje() && 
+						configuracionesCilindraje.getCilindraje()>mayorCilindraje){
+					mayorCilindraje= configuracionesCilindraje.getCilindraje();
+					cobroAdicional= configuracionesCilindraje.getCobroAdicional();
+				}
+			}
+			
+			cobroTotal= cobroTotal.add(cobroAdicional);
+		}
+		
+		Servicios servicios= optionalServicios.get();
+		
+		servicios.setCobrado(cobroTotal);
+		servicios.setFechaHoraSalida(new Date());
+		
+		return serviciosRepository.save(servicios);
 	}
 }

@@ -2,6 +2,11 @@ package com.ceiba.estacionamiento.service.impl;
 
 import static org.mockito.Mockito.when;
 
+import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -48,6 +53,18 @@ public class EstacionamientoServiceImplIntegrationTest {
 		exception.expect(EstacionamientoException.class);
 		exception.expectMessage("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
+	}
+	
+	@Test
+	public void testSalidaVehiculoFail() throws EstacionamientoException{
+		exception.expect(EstacionamientoException.class);
+		exception.expectMessage("El servicio no existe.");
+		estacionamientoServiceImpl.salidaVehiculo(0L, new Date());
+	}
+	
+	@Test
+	public void testSalidaVehiculoSuccess() throws EstacionamientoException{
+		assertEquals("1000.00", estacionamientoServiceImpl.salidaVehiculo(1L, new Date()).getCobrado().toString());
 	}
 	
 }

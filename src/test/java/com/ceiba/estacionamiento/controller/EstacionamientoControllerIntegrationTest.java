@@ -2,6 +2,9 @@ package com.ceiba.estacionamiento.controller;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -31,8 +34,11 @@ public class EstacionamientoControllerIntegrationTest {
 	
 	private RegistrarVehiculoDTO registrarVehiculo;
 	
+	private Map<String, Long> param;
+	
 	@Before
 	public void init(){
+		param= new HashMap<String, Long>();
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("FAC85X").build();
 	}
 	
@@ -56,6 +62,22 @@ public class EstacionamientoControllerIntegrationTest {
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
 		assertFalse(respuestaDTO.isSuccess());
 		assertEquals("Debe ingresar una placa", respuestaDTO.getMensaje());
+	}
+	
+	@Test
+	public void testSalidaVehiculoNoEncontrado() throws EstacionamientoException{
+		param.put("idServicio", 0L);
+		exception.expect(EstacionamientoException.class);
+		exception.expectMessage("El servicio no existe.");
+		estacionamientoController.salidaVehiculo(param);
+	}
+	
+	@Test
+	public void testSalidaVehiculoSuccess() throws EstacionamientoException{
+		param.put("idServicio", 1L);
+		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
+		assertTrue(respuestaDTO.isSuccess());
+		assertEquals("El total a pagar por el vehiculo es: 1000.00", respuestaDTO.getMensaje());
 	}
 		
 }

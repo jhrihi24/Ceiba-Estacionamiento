@@ -9,7 +9,7 @@ public class RegistrarVehiculoDTODataBuilder {
 	
 	public RegistrarVehiculoDTODataBuilder() {
 		this.placa = "CBJ57C";
-		this.cilindraje = 200;
+		this.cilindraje = 0;
 	}
 	
 	public RegistrarVehiculoDTODataBuilder withPlaca(String placa){
