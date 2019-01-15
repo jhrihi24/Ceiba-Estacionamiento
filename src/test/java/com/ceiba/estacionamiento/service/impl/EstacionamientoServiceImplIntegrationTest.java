@@ -1,10 +1,7 @@
 package com.ceiba.estacionamiento.service.impl;
 
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.*;
-
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Before;
@@ -44,27 +41,46 @@ public class EstacionamientoServiceImplIntegrationTest {
 	}
 	
 	@Test
-	public void testA() throws EstacionamientoException{
+	public void testARegistroVehiculos() throws EstacionamientoException{
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
 	}
 	
 	@Test
-	public void testB() throws EstacionamientoException{	
+	public void testBRegistroVehiculos() throws EstacionamientoException{	
 		exception.expect(EstacionamientoException.class);
 		exception.expectMessage("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
 	}
 	
 	@Test
-	public void testSalidaVehiculoFail() throws EstacionamientoException{
+	public void testCServiciosActivosNull(){
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos(null).size());
+	}
+	
+	@Test
+	public void testDServiciosActivosVacio(){
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("").size());
+	}
+	
+	@Test
+	public void testEServiciosActivosVacioFiltro(){
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("CB").size());
+	}
+	
+	@Test
+	public void testFServiciosActivosNoEncontrado(){
+		assertEquals(0, estacionamientoServiceImpl.getServiciosActivos("KK").size());
+	}
+	
+	@Test
+	public void testGSalidaVehiculoFail() throws EstacionamientoException{
 		exception.expect(EstacionamientoException.class);
 		exception.expectMessage("El servicio no existe.");
 		estacionamientoServiceImpl.salidaVehiculo(0L, new Date());
 	}
 	
 	@Test
-	public void testSalidaVehiculoSuccess() throws EstacionamientoException{
+	public void testHSalidaVehiculoSuccess() throws EstacionamientoException{
 		assertEquals("1000.00", estacionamientoServiceImpl.salidaVehiculo(1L, new Date()).getCobrado().toString());
 	}
-	
 }

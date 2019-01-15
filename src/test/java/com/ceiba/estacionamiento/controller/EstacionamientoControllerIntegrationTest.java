@@ -43,21 +43,21 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testA() throws EstacionamientoException, InterruptedException{		
+	public void testARegistrarVehiculo() throws EstacionamientoException, InterruptedException{		
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
 		assertTrue(respuestaDTO.isSuccess());
 		assertEquals("El vehiculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.", respuestaDTO.getMensaje());
 	}
 	
 	@Test
-	public void testB() throws EstacionamientoException, InterruptedException{	
+	public void testBRegistrarVehiculo() throws EstacionamientoException, InterruptedException{	
 		exception.expect(EstacionamientoException.class);
 		exception.expectMessage("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
 		estacionamientoController.registrarVehiculo(registrarVehiculo);
 	}
 	
 	@Test
-	public void testC() throws EstacionamientoException{
+	public void testCRegistrarVehiculo() throws EstacionamientoException{
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("").build();
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
 		assertFalse(respuestaDTO.isSuccess());
@@ -65,7 +65,17 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testSalidaVehiculoNoEncontrado() throws EstacionamientoException{
+	public void testDGetServiciosActivosSinPlaca(){
+		assertEquals(1, estacionamientoController.getServiciosActivos(null).size());
+	}
+	
+	@Test
+	public void testEGetServiciosActivosSinPlaca(){
+		assertEquals(1, estacionamientoController.getServiciosActivos("FAC").size());
+	}
+	
+	@Test
+	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException{
 		param.put("idServicio", 0L);
 		exception.expect(EstacionamientoException.class);
 		exception.expectMessage("El servicio no existe.");
@@ -73,7 +83,7 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testSalidaVehiculoSuccess() throws EstacionamientoException{
+	public void testGSalidaVehiculoSuccess() throws EstacionamientoException{
 		param.put("idServicio", 1L);
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
 		assertTrue(respuestaDTO.isSuccess());

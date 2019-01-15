@@ -67,6 +67,8 @@ public class EstacionamientoServiceImplUnitTest {
 
 	private RegistrarVehiculoDTO registrarVehiculo;
 	
+	private List<Servicios> serviciosList;
+	
 	private Optional<Servicios> optionalServicios;
 	
 	private List<Precios> preciosList;
@@ -74,13 +76,33 @@ public class EstacionamientoServiceImplUnitTest {
 	private List<ConfiguracionesCilindraje> configuracionesCilindrajeList;
  	
 	@Before
-	public void init(){		
+	public void init(){
+		serviciosList= new ArrayList<>();
+		serviciosList.add(new ServiciosDataBuilder().build());
 		preciosList= new ArrayList<>();
 		configuracionesCilindrajeList= new ArrayList<>();
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().build();
 		optionalServicios= Optional.of(new ServiciosDataBuilder().build());
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoMotos", 10);
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
+	}
+	
+	@Test
+	public void getServiciosActivosPlacaNull(){
+		when(serviciosRepository.findByServiciosActivos()).thenReturn(serviciosList);
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos(null).size());
+	}
+	
+	@Test
+	public void getServiciosActivosPlacaVacia(){		
+		when(serviciosRepository.findByServiciosActivos()).thenReturn(serviciosList);
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("").size());
+	}
+	
+	@Test
+	public void getServiciosActivosBusquedaPlaca(){
+		when(serviciosRepository.findByServiciosActivosPlaca("CB")).thenReturn(serviciosList);
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("CB").size());
 	}
 	
 	@Test
