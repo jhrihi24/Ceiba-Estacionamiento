@@ -117,8 +117,8 @@ public class EstacionamientoValidationUnitTest {
 	        case "martes":
 	        	prefijo = "M";
 	            break;
-	        case "miercoles":
-	        	prefijo = "MI";
+	        case "miércoles":
+	        	prefijo = "Mi";
 	            break;
 	        case "jueves":
 	        	prefijo = "J";
@@ -126,7 +126,7 @@ public class EstacionamientoValidationUnitTest {
 	        case "viernes":
 	        	prefijo = "V";
 	            break;
-	        case "sabado":
+	        case "sábado":
 	        	prefijo = "S";
 	            break;
 	        case "domingo":

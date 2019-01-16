@@ -66,12 +66,12 @@ public class EstacionamientoControllerIntegrationTest {
 	
 	@Test
 	public void testDGetServiciosActivosSinPlaca(){
-		assertEquals(1, estacionamientoController.getServiciosActivos(null).size());
+		assertEquals(1, estacionamientoController.getServiciosActivos(null).getData().size());
 	}
 	
 	@Test
 	public void testEGetServiciosActivosSinPlaca(){
-		assertEquals(1, estacionamientoController.getServiciosActivos("FAC").size());
+		assertEquals(1, estacionamientoController.getServiciosActivos("FAC").getData().size());
 	}
 	
 	@Test

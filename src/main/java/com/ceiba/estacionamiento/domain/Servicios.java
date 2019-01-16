@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.ceiba.estacionamiento.enums.TipoVehiculo;
 
@@ -35,9 +36,11 @@ public class Servicios implements Serializable{
 	private Integer cilindraje;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date fechaHoraIngreso;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date fechaHoraSalida;
 	
 	private BigDecimal cobrado;

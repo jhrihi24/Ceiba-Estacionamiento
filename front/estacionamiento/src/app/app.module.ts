@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { UiModule } from './ui/ui.module';
+import { FormEstacionamientoModule } from './form-estacionamiento/form-estacionamiento.module';
 
 @NgModule({
   declarations: [
@@ -10,6 +12,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    UiModule,
+    FormEstacionamientoModule,
     AppRoutingModule
   ],
   providers: [],

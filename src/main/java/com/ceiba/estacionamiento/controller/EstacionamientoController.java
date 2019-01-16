@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,7 @@ import com.ceiba.estacionamiento.exception.EstacionamientoException;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/estacionamiento")
 public class EstacionamientoController extends AbstractController{
@@ -34,8 +36,10 @@ public class EstacionamientoController extends AbstractController{
 	}
 	
 	@GetMapping
-	public List<Servicios> getServiciosActivos(@RequestParam(value="placa", required=false) String placa){
-		return estacionamientoService.getServiciosActivos(placa);
+	public RespuestaDTO<List<Servicios>> getServiciosActivos(@RequestParam(value="placa", required=false) String placa){
+		RespuestaDTO<List<Servicios>> respuesta= new RespuestaDTO<>();
+		respuesta.setData(estacionamientoService.getServiciosActivos(placa));
+		return respuesta;
 	}
 	
 	@PostMapping
@@ -53,7 +57,7 @@ public class EstacionamientoController extends AbstractController{
 		Date fechaActual= new Date();
 		RespuestaDTO<String> respuesta= new RespuestaDTO<>();		
 		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);
-		respuesta.setMensaje("El total a pagar por el vehiculo es: "+servicios.getCobrado());	
+		respuesta.setMensaje("El total a pagar por el vehiculo con placa "+servicios.getPlaca()+" es: "+servicios.getCobrado());	
 		return respuesta;
 	}
 	
