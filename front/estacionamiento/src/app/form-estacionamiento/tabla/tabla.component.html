@@ -1,0 +1,29 @@
+<h1>Lista de Cobros</h1>
+<div class="espacio-largo"></div>
+<div class="row">    
+    <div class="col-md-10">        
+        <input type="text" class="form-control" [(ngModel)]="placaBuscar" placeholder="Ingrese el nro de placa a buscar"/>        
+    </div>
+    <div class="col-md-2"><button class="btn btn-secondary tamano-btn" (click)="getServicios();" >Buscar</button></div>
+</div>
+<div class="espacio-normal"></div>
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Placa</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Fecha Entrada</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let servicio of serviciosList">
+            <tr>
+                <td>{{servicio.placa}}</td>
+                <td>{{servicio.tipoVehiculo}}</td>
+                <td>{{servicio.fechaHoraIngreso | date:'yyyy-MM-dd H:mm' }}</td>
+                <td><button class="btn btn-dark tamano-btn" (click)="openConfirmationDialog(servicio);" >Salida</button></td>
+            </tr>
+        </tbody>
+    </table>    
+</div>
