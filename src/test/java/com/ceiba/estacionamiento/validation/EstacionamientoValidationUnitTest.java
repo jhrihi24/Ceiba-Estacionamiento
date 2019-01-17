@@ -53,7 +53,7 @@ public class EstacionamientoValidationUnitTest {
 	
 	@Test
 	public void validarIngresoVehiculoTipoValidacionInicioFALSE(){
-		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date()));
+		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder().withProhibicionDias(prefijoDiaActual).build();
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
@@ -63,7 +63,7 @@ public class EstacionamientoValidationUnitTest {
 	
 	@Test
 	public void validarIngresoVehiculoTipoValidacionFinalFALSE(){
-		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date()));
+		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder()
 				.withProhibicionDias(prefijoDiaActual)
 				.withTipoValidacion(TipoValidacion.FINAL).build();
@@ -76,7 +76,7 @@ public class EstacionamientoValidationUnitTest {
 	@Test
 	public void validarIngresoVehiculoTipoValidacionDiaSemanaDiferenteTRUE(){
 		String diaActual= "L";
-		if(new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date()).equals("lunes"))
+		if(new SimpleDateFormat("EEEE", Locale.US).format(new Date()).equals("Monday"))
 			diaActual="M";
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder().withProhibicionDias(diaActual).build();
 		configuracionesIngresoList.add(configuracionesIngreso);
@@ -85,7 +85,7 @@ public class EstacionamientoValidationUnitTest {
 	
 	@Test
 	public void validarIngresoVehiculoTipoValidacionInicioTRUE(){
-		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date()));
+		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder()
 				.withProhibicionDias(prefijoDiaActual)
 				.build();
@@ -97,7 +97,7 @@ public class EstacionamientoValidationUnitTest {
 	
 	@Test
 	public void validarIngresoVehiculoTipoValidacionFinalTRUE(){
-		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date()));
+		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder()
 				.withProhibicionDias(prefijoDiaActual)
 				.withTipoValidacion(TipoValidacion.FINAL)
@@ -109,28 +109,27 @@ public class EstacionamientoValidationUnitTest {
 	}
 	
 	private String asignacionPrefijoDia(String dia){
-		dia= dia.replace("é", "e").replace("á", "a");
 		String prefijo= "";
 		switch (dia) {
-	        case "lunes":
+	        case "Monday":
 	        	prefijo = "L";
 	            break;
-	        case "martes":
+	        case "Tuesday":
 	        	prefijo = "M";
 	            break;
-	        case "miercoles":
+	        case "Wednesday":
 	        	prefijo = "Mi";
 	            break;
-	        case "jueves":
+	        case "Thursday":
 	        	prefijo = "J";
 	            break;
-	        case "viernes":
+	        case "Friday":
 	        	prefijo = "V";
 	            break;
-	        case "sabado":
+	        case "Saturday":
 	        	prefijo = "S";
 	            break;
-	        case "domingo":
+	        case "Sunday":
 	        	prefijo = "D";
 	            break;
 	        default:

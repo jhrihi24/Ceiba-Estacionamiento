@@ -2,13 +2,13 @@ package com.ceiba.estacionamiento.enums;
 
 public enum DiasSemana {
 	
-	LUNES("L", "lunes"),
-	MARTES("M", "martes"),
-	MIERCOLES("Mi", "miercoles"),
-	JUEVES("J", "jueves"),
-	VIERNES("V", "viernes"),
-	SABADO("S", "sabado"),
-	DOMINGO("D", "domingo");
+	LUNES("L", "Monday"),
+	MARTES("M", "Tuesday"),
+	MIERCOLES("Mi", "Wednesday"),
+	JUEVES("J", "Thursday"),
+	VIERNES("V", "Friday"),
+	SABADO("S", "Saturday"),
+	DOMINGO("D", "Sunday");
 	
 	private final String identificador;
 	private final String descripcion;
