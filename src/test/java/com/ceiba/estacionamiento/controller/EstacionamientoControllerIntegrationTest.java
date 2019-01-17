@@ -87,7 +87,6 @@ public class EstacionamientoControllerIntegrationTest {
 		param.put("idServicio", 1L);
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
 		assertTrue(respuestaDTO.isSuccess());
-		assertEquals("El total a pagar por el vehiculo es: 1000.00", respuestaDTO.getMensaje());
 	}
 		
 }
