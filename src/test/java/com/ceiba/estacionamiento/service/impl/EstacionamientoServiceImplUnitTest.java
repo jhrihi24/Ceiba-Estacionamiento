@@ -116,7 +116,7 @@ public class EstacionamientoServiceImplUnitTest {
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
 	}
 	
-	/*@Test
+	@Test
 	public void registrarVehiculoPlacaDuplicada() throws EstacionamientoException{		
 		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(1L);
 		exception.expect(EstacionamientoException.class);
@@ -124,7 +124,7 @@ public class EstacionamientoServiceImplUnitTest {
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
 	}
 	
-	@Test
+	/*@Test
 	public void registrarVehiculoSinCupoMoto() throws EstacionamientoException{
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withCilindraje(150).build();
 		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(1);
