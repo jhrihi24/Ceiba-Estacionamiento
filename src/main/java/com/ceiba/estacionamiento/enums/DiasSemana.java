@@ -4,10 +4,10 @@ public enum DiasSemana {
 	
 	LUNES("L", "lunes"),
 	MARTES("M", "martes"),
-	MIERCOLES("Mi", "miércoles"),
+	MIERCOLES("Mi", "miercoles"),
 	JUEVES("J", "jueves"),
 	VIERNES("V", "viernes"),
-	SABADO("S", "sábado"),
+	SABADO("S", "sabado"),
 	DOMINGO("D", "domingo");
 	
 	private final String identificador;

@@ -109,6 +109,7 @@ public class EstacionamientoValidationUnitTest {
 	}
 	
 	private String asignacionPrefijoDia(String dia){
+		dia= dia.replace("é", "e").replace("á", "a");
 		String prefijo= "";
 		switch (dia) {
 	        case "lunes":
@@ -117,7 +118,7 @@ public class EstacionamientoValidationUnitTest {
 	        case "martes":
 	        	prefijo = "M";
 	            break;
-	        case "miércoles":
+	        case "miercoles":
 	        	prefijo = "Mi";
 	            break;
 	        case "jueves":
@@ -126,7 +127,7 @@ public class EstacionamientoValidationUnitTest {
 	        case "viernes":
 	        	prefijo = "V";
 	            break;
-	        case "sábado":
+	        case "sabado":
 	        	prefijo = "S";
 	            break;
 	        case "domingo":

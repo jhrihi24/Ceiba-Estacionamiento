@@ -30,7 +30,7 @@ public class EstacionamientoValidation {
 	}
 	
 	public Boolean validarDiasIngresoVehiculo(String placa, TipoVehiculo tipoVehiculo, List<ConfiguracionesIngreso> configuracionesIngresoList){
-		String diaActual= new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date());
+		String diaActual= new SimpleDateFormat("EEEE", new Locale("es","ES")).format(new Date()).replace("é", "e").replace("á", "a");
 		for(ConfiguracionesIngreso configuracionesIngreso: configuracionesIngresoList){
 			if(tipoVehiculo.getValue()==configuracionesIngreso.getTipoVehiculo().getValue()){
 				String[] dias= configuracionesIngreso.getProhibicionDias().split("-");
