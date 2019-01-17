@@ -75,7 +75,7 @@ public class EstacionamientoUtils {
 		return Boolean.FALSE;		
 	}
 	
-	public static Boolean validarPlacaParticularesPublicos(String placa){
+	private static Boolean validarPlacaParticularesPublicos(String placa){
 		if(placa.length()==6){
 			long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
 			long countNumeros= placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
@@ -85,7 +85,7 @@ public class EstacionamientoUtils {
 		return Boolean.FALSE;
 	}
 	
-	public static Boolean validarPlacaDiplomaticos(String placa){
+	private static Boolean validarPlacaDiplomaticos(String placa){
 		if(placa.length()==6){
 			long countLetras= placa.substring(0, 2).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
 			long countNumeros= placa.substring(2, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
@@ -95,7 +95,7 @@ public class EstacionamientoUtils {
 		return Boolean.FALSE;
 	}
 	
-	public static Boolean validarPlacaCarga(String placa){
+	private static Boolean validarPlacaCarga(String placa){
 		if(placa.length()==5){
 			long countLetras= placa.substring(0, 1).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
 			long countNumeros= placa.substring(1, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count();
@@ -105,7 +105,7 @@ public class EstacionamientoUtils {
 		return Boolean.FALSE;
 	}
 	
-	public static Boolean validarPlacaMoto(String placa){
+	private static Boolean validarPlacaMoto(String placa){
 		if(placa.length()==6){
 			long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
 			long countNumeros= placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count();
