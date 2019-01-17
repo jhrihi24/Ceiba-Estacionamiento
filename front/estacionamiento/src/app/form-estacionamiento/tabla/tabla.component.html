@@ -2,7 +2,8 @@
 <div class="espacio-largo"></div>
 <div class="row">    
     <div class="col-md-10">        
-        <input type="text" class="form-control" [(ngModel)]="placaBuscar" placeholder="Ingrese el nro de placa a buscar"/>        
+        <input type="text" class="form-control" [(ngModel)]="placaBuscar" placeholder="Ingrese el nro de placa a buscar"
+        (keyup)="this.placaBuscar = this.placaBuscar.toUpperCase();"/>        
     </div>
     <div class="col-md-2"><button class="btn btn-secondary tamano-btn" (click)="getServicios();" >Buscar</button></div>
 </div>

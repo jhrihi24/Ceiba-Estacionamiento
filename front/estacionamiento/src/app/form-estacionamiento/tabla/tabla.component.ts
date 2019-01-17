@@ -71,7 +71,7 @@ export class TablaComponent implements OnInit {
 
     public openConfirmationDialog(servicioSeleccionado: Servicios) {
         this.servicio = servicioSeleccionado;
-        this.confirmationDialogService.confirm('Confirmar', 'Realmente quiere dar de salida al vehiculo '+this.servicio.placa+'?')
+        this.confirmationDialogService.confirm('Confirmar', 'Realmente quiere dar de salida al veh\u00EDculo con placa ' + this.servicio.placa + '?')
         .then((confirmed) => this.darSalidaVehiculo(confirmed))
         .catch(() => console.log('Error'));
     }

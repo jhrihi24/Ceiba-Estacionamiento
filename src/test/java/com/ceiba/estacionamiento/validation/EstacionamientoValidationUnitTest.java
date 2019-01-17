@@ -106,7 +106,7 @@ public class EstacionamientoValidationUnitTest {
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.bucarCadenaFinal("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.FALSE);
 		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", TipoVehiculo.MOTO, configuracionesIngresoList));
-	}
+	}	
 	
 	private String asignacionPrefijoDia(String dia){
 		String prefijo= "";

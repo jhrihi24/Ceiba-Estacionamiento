@@ -64,7 +64,7 @@ public class EstacionamientoServiceImplIntegrationTest {
 	
 	@Test
 	public void testEServiciosActivosVacioFiltro(){
-		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("CB").size());
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("TR").size());
 	}
 	
 	@Test

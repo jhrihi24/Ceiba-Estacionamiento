@@ -39,14 +39,14 @@ public class EstacionamientoControllerIntegrationTest {
 	@Before
 	public void init(){
 		param= new HashMap<String, Long>();
-		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("FAC85X").build();
+		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("TRI852").build();
 	}
 	
 	@Test
 	public void testARegistrarVehiculo() throws EstacionamientoException, InterruptedException{		
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
 		assertTrue(respuestaDTO.isSuccess());
-		assertEquals("El vehiculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.", respuestaDTO.getMensaje());
+		assertEquals("El veh\u00EDculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.", respuestaDTO.getMensaje());
 	}
 	
 	@Test
@@ -71,14 +71,14 @@ public class EstacionamientoControllerIntegrationTest {
 	
 	@Test
 	public void testEGetServiciosActivosSinPlaca(){
-		assertEquals(1, estacionamientoController.getServiciosActivos("FAC").getData().size());
+		assertEquals(1, estacionamientoController.getServiciosActivos("TR").getData().size());
 	}
 	
 	@Test
 	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException{
 		param.put("idServicio", 0L);
 		exception.expect(EstacionamientoException.class);
-		//exception.expectMessage("El servicio no existe.");
+		//exception.expectMessage("El servicio no existed.");
 		estacionamientoController.salidaVehiculo(param);
 	}
 	

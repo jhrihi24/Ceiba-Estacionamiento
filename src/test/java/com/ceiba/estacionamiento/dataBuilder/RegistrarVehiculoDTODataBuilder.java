@@ -8,7 +8,7 @@ public class RegistrarVehiculoDTODataBuilder {
 	private Integer cilindraje;
 	
 	public RegistrarVehiculoDTODataBuilder() {
-		this.placa = "CBJ57C";
+		this.placa = "TRC854";
 		this.cilindraje = 0;
 	}
 	

@@ -1,6 +1,7 @@
 package com.ceiba.estacionamiento.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import com.ceiba.estacionamiento.repository.ConfiguracionesIngresoRepository;
 import com.ceiba.estacionamiento.repository.PreciosRepository;
 import com.ceiba.estacionamiento.repository.ServiciosRepository;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
+import com.ceiba.estacionamiento.trm.TRMWebService;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
 
@@ -32,6 +34,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	private ConfiguracionesIngresoRepository configuracionesIngresoRepository;
 	private PreciosRepository preciosRepository;
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
+	private TRMWebService trmWebService;
 	private EstacionamientoValidation estacionamientoValidation;
 	
 	@Value("${maximo.motos}")
@@ -42,11 +45,13 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	
 	@Autowired	
 	public EstacionamientoServiceImpl(ServiciosRepository serviciosRepository, ConfiguracionesIngresoRepository configuracionesIngresoRepository, 
-			PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository) {
+			TRMWebService trmWebService, PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, 
+			ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository) {
 		this.serviciosRepository = serviciosRepository;
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
 		this.preciosRepository = preciosRepository;
 		this.configuracionesCilindrajeRepository= configuracionesCilindrajeRepository;
+		this.trmWebService= trmWebService;
 		this.estacionamientoValidation = estacionamientoValidation;		
 	}
 	
@@ -61,19 +66,21 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 
 	@Transactional
 	public void registarVehiculo(RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException {
-		TipoVehiculo tipoVehiculo= registrarVehiculo.getCilindraje()==0 ? TipoVehiculo.CARRO: TipoVehiculo.MOTO;		
+		TipoVehiculo tipoVehiculo= registrarVehiculo.getCilindraje()==0 ? TipoVehiculo.CARRO: TipoVehiculo.MOTO;
+		if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
+			throw new EstacionamientoException("La placa ingresada no cuenta con el formato valido.");
+		}		
 		if(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())>0){
-			throw new EstacionamientoException("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
+			throw new EstacionamientoException("Ya se encuentra un veh\u00EDculo con esa placa en el estacionamiento.");
 		}		
 		Long vehiculosIngresados= serviciosRepository.countByVehiculoIngresado(tipoVehiculo);
 		if((tipoVehiculo.equals(TipoVehiculo.CARRO) && vehiculosIngresados.intValue()==maximoCarros) || 
 				(tipoVehiculo.equals(TipoVehiculo.MOTO) && vehiculosIngresados.intValue()==maximoMotos)){
-			throw new EstacionamientoException("No hay cupo para el vehiculo.");
+			throw new EstacionamientoException("No hay cupo para el veh\u00EDculo.");
 		}
 		if(!estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), tipoVehiculo, configuracionesIngresoRepository.findAll())){
-			throw new EstacionamientoException("El vehiculo no esta autorizado para ingresar el dia de hoy.");
-		}
-		
+			throw new EstacionamientoException("El veh\u00EDculo no esta autorizado para ingresar el dia de hoy.");
+		}		
 		
 		Servicios servicios= new Servicios();
 				
@@ -86,7 +93,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	}
 	
 	@Transactional
-	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException{
+	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException{		
 		Optional<Servicios> optionalServicios= serviciosRepository.findById(idServicio);
 		if(!optionalServicios.isPresent()){
 			throw new EstacionamientoException("El servicio no existe.");
@@ -123,6 +130,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		Servicios servicios= optionalServicios.get();
 		
 		servicios.setCobrado(cobroTotal);
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrmActual()));
 		servicios.setFechaHoraSalida(new Date());
 		
 		return serviciosRepository.save(servicios);

@@ -36,50 +36,56 @@ export class RegistroComponent implements OnInit {
    validarInfoVehiculo(): string {
      let strValidacion = '';
      if (this.registroVehiculo.placa.trim().length === 0) {
-         strValidacion = 'Ingrese una placa';
+         strValidacion = 'Debe ingresar una placa';
      }
 
      return strValidacion;
    }
 
-   registrarVehiculo(): void{
+   registrarVehiculo(): void {
        let validacion= this.validarInfoVehiculo();
+       this.mostrarMensajeDanger('', false);
+       this.mostrarMensajeSuccess('', false);
        if (validacion.trim().length === 0) {
-            this.mostrarMensajeDanger('', false);
-            this.mostrarMensajeSuccess('', false);
+           if(this.registroVehiculo.cilindraje == null)
+                this.registroVehiculo.cilindraje= 0;
+           
             this.estacionamientoService.addVehiculo(this.registroVehiculo).subscribe( respuesta =>{
-                if(respuesta.success){
+                if(respuesta.success) {
                     this.mostrarMensajeSuccess(respuesta.mensaje, true);
                     this.getServicios();
                     this.limpiarRegistroVehiculo();
-                }else{
+                } else {
                     this.mostrarMensajeDanger(respuesta.mensaje, true);
                 }
             });
-       }else{
+       } else {
             this.mostrarMensajeDanger(validacion, true);
        }
     }
 
     getServicios(): void {
-        this.estacionamientoService.getServicios('').subscribe(respuesta =>{
+        this.estacionamientoService.getServicios('').subscribe(respuesta => {
             if (respuesta.success) {
                 this.serviciosIngresados = respuesta.data;
-                console.log(this.serviciosIngresados);
             } else {
                 this.serviciosIngresados = [];
             }
         });
     }
 
-    mostrarMensajeSuccess(mensaje: string, mostrar: boolean): void{
+    mostrarMensajeSuccess(mensaje: string, mostrar: boolean): void {
       this.mensajeSuccess = mensaje;
       this.showSuccess = mostrar;
     }
 
-    mostrarMensajeDanger(mensaje: string, mostrar: boolean): void{
+    mostrarMensajeDanger(mensaje: string, mostrar: boolean): void {
       this.mensajeDanger = mensaje;
       this.showDanger = mostrar;
+    }
+
+    soloMayusculasPlaca(): void {
+        this.registroVehiculo.placa = this.registroVehiculo.placa != undefined ? this.registroVehiculo.placa.toUpperCase() : '';
     }
 
 }

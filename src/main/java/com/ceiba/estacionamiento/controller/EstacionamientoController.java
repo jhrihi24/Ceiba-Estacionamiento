@@ -1,7 +1,11 @@
 package com.ceiba.estacionamiento.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +51,7 @@ public class EstacionamientoController extends AbstractController{
 		RespuestaDTO<String> respuesta= estacionamientoValidation.validarCamposRegistroVehiculo(registrarVehiculo);
 		if(respuesta.isSuccess()){
 			estacionamientoService.registarVehiculo(registrarVehiculo);
-			respuesta.setMensaje("El vehiculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");
+			respuesta.setMensaje("El veh\u00EDculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");
 		}		
 		return respuesta;
 	}
@@ -55,9 +59,11 @@ public class EstacionamientoController extends AbstractController{
 	@PutMapping
 	public RespuestaDTO<String> salidaVehiculo(@RequestBody Map<String, Long> param) throws EstacionamientoException{
 		Date fechaActual= new Date();
-		RespuestaDTO<String> respuesta= new RespuestaDTO<>();		
-		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);
-		respuesta.setMensaje("El total a pagar por el vehiculo con placa "+servicios.getPlaca()+" es: "+servicios.getCobrado());	
+		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
+		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);		
+		respuesta.setMensaje("El total a pagar por el veh\u00EDculo con placa "+servicios.getPlaca()+" es: "+
+				NumberFormat.getCurrencyInstance(new Locale("es","CO")).format(servicios.getCobrado())+
+				" ó USD: "+NumberFormat.getCurrencyInstance(Locale.US).format(servicios.getCobradoUSD()));	
 		return respuesta;
 	}
 	
