@@ -63,8 +63,8 @@ public class EstacionamientoServiceImplUnitTest {
 	@Mock
 	private EstacionamientoValidation estacionamientoValidation;
 	
-	/*@Mock
-	private TRMWebService trmWebService;*/
+	@Mock
+	private TRMWebService trmWebService;
 	
 	@InjectMocks
 	private EstacionamientoServiceImpl estacionamientoServiceImpl;
