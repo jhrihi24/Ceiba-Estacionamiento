@@ -14,7 +14,6 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.ceiba.estacionamiento.dataBuilder.RegistrarVehiculoDTODataBuilder;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
@@ -36,8 +35,6 @@ public class EstacionamientoServiceImplIntegrationTest {
 	@Before
 	public void init(){
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().build();
-		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoMotos", 10);
-		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 		
 	@Test

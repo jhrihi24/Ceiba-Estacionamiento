@@ -1,7 +1,6 @@
 package com.ceiba.estacionamiento.service.impl;
 
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -65,9 +64,9 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	@Transactional
 	public void registarVehiculo(RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException {
 		TipoVehiculo tipoVehiculo= registrarVehiculo.getCilindraje()==0 ? TipoVehiculo.CARRO: TipoVehiculo.MOTO;
-		if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
+		/*if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
 			throw new EstacionamientoException("La placa ingresada no cuenta con el formato valido.");
-		}		
+		}*/		
 		if(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())>0){
 			throw new EstacionamientoException("Ya se encuentra un veh\u00EDculo con esa placa en el estacionamiento.");
 		}		
