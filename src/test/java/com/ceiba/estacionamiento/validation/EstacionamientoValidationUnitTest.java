@@ -24,7 +24,6 @@ import com.ceiba.estacionamiento.domain.ConfiguracionesIngreso;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.enums.TipoValidacion;
-import com.ceiba.estacionamiento.enums.TipoVehiculo;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 
 
@@ -58,7 +57,7 @@ public class EstacionamientoValidationUnitTest {
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.buscarCadenaInicio("ABC", configuracionesIngreso.getValor())).thenReturn(Boolean.TRUE);
-		assertFalse(estacionamientoValidation.validarDiasIngresoVehiculo("ABC", TipoVehiculo.MOTO, configuracionesIngresoList));
+		assertFalse(estacionamientoValidation.validarDiasIngresoVehiculo("ABC", configuracionesIngresoList));
 	}
 	
 	@Test
@@ -70,7 +69,7 @@ public class EstacionamientoValidationUnitTest {
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.bucarCadenaFinal("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.TRUE);
-		assertFalse(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", TipoVehiculo.MOTO, configuracionesIngresoList));
+		assertFalse(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
 	}
 	
 	@Test
@@ -80,7 +79,7 @@ public class EstacionamientoValidationUnitTest {
 			diaActual="M";
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder().withProhibicionDias(diaActual).build();
 		configuracionesIngresoList.add(configuracionesIngreso);
-		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", TipoVehiculo.MOTO, configuracionesIngresoList));
+		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
 	}
 	
 	@Test
@@ -92,7 +91,7 @@ public class EstacionamientoValidationUnitTest {
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.buscarCadenaInicio("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.FALSE);
-		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", TipoVehiculo.MOTO, configuracionesIngresoList));
+		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
 	}
 	
 	@Test
@@ -105,7 +104,7 @@ public class EstacionamientoValidationUnitTest {
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.bucarCadenaFinal("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.FALSE);
-		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", TipoVehiculo.MOTO, configuracionesIngresoList));
+		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
 	}	
 	
 	private String asignacionPrefijoDia(String dia){

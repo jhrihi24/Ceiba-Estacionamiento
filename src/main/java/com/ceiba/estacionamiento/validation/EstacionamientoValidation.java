@@ -29,22 +29,28 @@ public class EstacionamientoValidation {
 		return respuesta;
 	}
 	
-	public Boolean validarDiasIngresoVehiculo(String placa, TipoVehiculo tipoVehiculo, List<ConfiguracionesIngreso> configuracionesIngresoList){
+	public Boolean validarDiasIngresoVehiculo(String placa, List<ConfiguracionesIngreso> configuracionesIngresoList){
 		String diaActual= new SimpleDateFormat("EEEE", Locale.US).format(new Date());
-		for(ConfiguracionesIngreso configuracionesIngreso: configuracionesIngresoList){
-			if(tipoVehiculo==configuracionesIngreso.getTipoVehiculo()){
-				String[] dias= configuracionesIngreso.getProhibicionDias().split("-");
-				for(String d: dias){
-					if(DiasSemana.getDescripcion(d).equals(diaActual) && 
-					((configuracionesIngreso.getTipoValidacion().equals(TipoValidacion.INICIO) && EstacionamientoUtils.buscarCadenaInicio(placa, configuracionesIngreso.getValor())) || 
-					(configuracionesIngreso.getTipoValidacion().equals(TipoValidacion.FINAL) && EstacionamientoUtils.bucarCadenaFinal(placa, configuracionesIngreso.getValor())))){
+		for(ConfiguracionesIngreso configuracionesIngreso: configuracionesIngresoList){			
+			String[] dias= configuracionesIngreso.getProhibicionDias().split("-");
+			for(String d: dias){
+				if(DiasSemana.getDescripcion(d).equals(diaActual) && 
+					(validarTipoValidacionInicial(configuracionesIngreso.getTipoValidacion(), placa, configuracionesIngreso.getValor()) || 
+							validarTipoValidacionFInal(configuracionesIngreso.getTipoValidacion(), placa, configuracionesIngreso.getValor()))){
 						return Boolean.FALSE;
-					}
 				}
-			}
+			}			
 		}
 		
 		return Boolean.TRUE;
+	}
+	
+	private Boolean validarTipoValidacionInicial(TipoValidacion tipoValidacion, String placa, String valorConfiguracionesIngreso){
+		return tipoValidacion==TipoValidacion.INICIO && EstacionamientoUtils.buscarCadenaInicio(placa, valorConfiguracionesIngreso);
+	}
+	
+	private Boolean validarTipoValidacionFInal(TipoValidacion tipoValidacion, String placa, String valorConfiguracionesIngreso){
+		return tipoValidacion==TipoValidacion.FINAL && EstacionamientoUtils.bucarCadenaFinal(placa, valorConfiguracionesIngreso);
 	}
 		
 }

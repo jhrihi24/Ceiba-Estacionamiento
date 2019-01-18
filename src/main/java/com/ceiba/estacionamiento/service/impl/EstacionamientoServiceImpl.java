@@ -78,7 +78,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 				(tipoVehiculo.equals(TipoVehiculo.MOTO) && vehiculosIngresados.intValue()==maximoMotos)){
 			throw new EstacionamientoException("No hay cupo para el veh\u00EDculo.");
 		}
-		if(!estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), tipoVehiculo, configuracionesIngresoRepository.findAll())){
+		if(!estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo))){
 			throw new EstacionamientoException("El veh\u00EDculo no esta autorizado para ingresar el dia de hoy.");
 		}		
 		

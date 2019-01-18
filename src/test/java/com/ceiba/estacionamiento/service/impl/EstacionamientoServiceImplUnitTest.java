@@ -118,8 +118,8 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
 		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(0L);
 		when(serviciosRepository.countByVehiculoIngresado(tipoVehiculo)).thenReturn(0L);
-		when(configuracionesIngresoRepository.findAll()).thenReturn(configuracionesIngresoList);
-		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), tipoVehiculo, configuracionesIngresoList)).thenReturn(Boolean.TRUE);		
+		when(configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo)).thenReturn(configuracionesIngresoList);
+		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList)).thenReturn(Boolean.TRUE);		
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
 	}
 	
@@ -175,8 +175,8 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
 		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(0L);
 		when(serviciosRepository.countByVehiculoIngresado(tipoVehiculo)).thenReturn(0L);
-		when(configuracionesIngresoRepository.findAll()).thenReturn(configuracionesIngresoList);
-		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), tipoVehiculo, configuracionesIngresoList)).thenReturn(Boolean.FALSE);		
+		when(configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo)).thenReturn(configuracionesIngresoList);
+		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList)).thenReturn(Boolean.FALSE);		
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("El vehiculo no esta autorizado para ingresar el dia de hoy.");
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
