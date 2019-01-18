@@ -7,7 +7,7 @@ import java.util.Date;
 
 import com.ceiba.estacionamiento.enums.TipoVehiculo;
 
-public class EstacionamientoUtils {
+public final class EstacionamientoUtils {
 	
 	private EstacionamientoUtils() {
 	    throw new IllegalStateException("Utility class");
