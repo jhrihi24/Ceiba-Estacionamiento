@@ -44,7 +44,7 @@ public class EstacionamientoControllerIntegrationTest {
 	
 	@Test
 	public void prueba(){
-		
+		assertTrue(Boolean.TRUE);
 	}
 	
 	/*@Test

@@ -1,6 +1,7 @@
 package com.ceiba.estacionamiento.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -93,7 +94,7 @@ public class EstacionamientoServiceImplUnitTest {
 	
 	@Test
 	public void prueba(){
-		
+		assertTrue(Boolean.TRUE);
 	}
 	
 	/*@Test

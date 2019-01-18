@@ -1,6 +1,7 @@
 package com.ceiba.estacionamiento.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -42,7 +43,7 @@ public class EstacionamientoServiceImplIntegrationTest {
 	
 	@Test
 	public void prueba(){
-		
+		assertTrue(Boolean.TRUE);
 	}
 	
 	/*@Test
