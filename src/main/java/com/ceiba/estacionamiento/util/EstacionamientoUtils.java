@@ -61,11 +61,34 @@ public class EstacionamientoUtils {
 	
 	public static Boolean validarPlacaValida(String placa, TipoVehiculo tipoVehiculo){
 		if(tipoVehiculo==TipoVehiculo.CARRO){
-			if(placa.length()==6){
-				long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-				long countNumeros= placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
-				return (countLetras==3 && countNumeros==3);
+			//Placas particulares
+			if(placa.length()==6 && 
+				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 && 
+				placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==3)){
+				return Boolean.TRUE;			
 			}
+			
+			//Placas de diplomaticos
+			if(placa.length()==6 && 
+				(placa.substring(0, 2).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==2 &&
+				placa.substring(2, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4)){
+				return Boolean.TRUE;
+			}
+			
+			//Placas de carga
+			if(placa.length()==5 &&
+				(placa.substring(0, 1).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1 &&
+				placa.substring(1, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4)){
+				return Boolean.TRUE;
+			}
+		}
+		
+		//Placas de moto
+		if(tipoVehiculo==TipoVehiculo.MOTO && placa.length()==6 &&
+			(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 &&
+			placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==2 &&
+			placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1)){
+			return Boolean.TRUE;
 		}
 		/*if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaParticularesPublicos(placa)){
 			return Boolean.TRUE;
@@ -82,7 +105,7 @@ public class EstacionamientoUtils {
 		return Boolean.FALSE;		
 	}
 	
-	private static Boolean validarPlacaParticularesPublicos(String placa){
+	/*private static Boolean validarPlacaParticularesPublicos(String placa){
 		if(placa.length()==6){
 			long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
 			long countNumeros= placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
@@ -90,7 +113,7 @@ public class EstacionamientoUtils {
 		}
 		
 		return Boolean.FALSE;
-	}
+	}*/
 	
 	private static Boolean validarPlacaDiplomaticos(String placa){
 		if(placa.length()==6){
