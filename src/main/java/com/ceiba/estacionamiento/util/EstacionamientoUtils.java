@@ -60,7 +60,14 @@ public class EstacionamientoUtils {
 	}
 	
 	public static Boolean validarPlacaValida(String placa, TipoVehiculo tipoVehiculo){
-		if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaParticularesPublicos(placa)){
+		if(tipoVehiculo==TipoVehiculo.CARRO){
+			if(placa.length()==6){
+				long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
+				long countNumeros= placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
+				return (countLetras==3 && countNumeros==3);
+			}
+		}
+		/*if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaParticularesPublicos(placa)){
 			return Boolean.TRUE;
 		}
 		if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaDiplomaticos(placa)){
@@ -71,7 +78,7 @@ public class EstacionamientoUtils {
 		}
 		if(tipoVehiculo==TipoVehiculo.MOTO && validarPlacaMoto(placa)){
 			return Boolean.TRUE;
-		}
+		}*/
 		return Boolean.FALSE;		
 	}
 	
