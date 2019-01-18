@@ -12,7 +12,6 @@ import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.enums.DiasSemana;
 import com.ceiba.estacionamiento.enums.TipoValidacion;
-import com.ceiba.estacionamiento.enums.TipoVehiculo;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 
 @Component
