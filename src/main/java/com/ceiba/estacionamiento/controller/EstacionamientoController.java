@@ -63,7 +63,7 @@ public class EstacionamientoController extends AbstractController{
 		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);		
 		respuesta.setMensaje("El total a pagar por el veh\u00EDculo con placa "+servicios.getPlaca()+" es: "+
 				NumberFormat.getCurrencyInstance(new Locale("es","CO")).format(servicios.getCobrado())+
-				" ó USD: "+NumberFormat.getCurrencyInstance(Locale.US).format(servicios.getCobradoUSD()));	
+				" \u00F3 USD: "+NumberFormat.getCurrencyInstance(Locale.US).format(servicios.getCobradoUSD()));	
 		return respuesta;
 	}
 	
