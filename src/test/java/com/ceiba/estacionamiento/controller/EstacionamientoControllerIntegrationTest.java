@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException{
+	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException, RemoteException{
 		param.put("idServicio", 0L);
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("El servicio no existed.");
@@ -85,7 +86,7 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testGSalidaVehiculoSuccess() throws EstacionamientoException{
+	public void testGSalidaVehiculoSuccess() throws EstacionamientoException, RemoteException{
 		param.put("idServicio", 1L);
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
 		assertTrue(respuestaDTO.isSuccess());
