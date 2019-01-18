@@ -183,7 +183,7 @@ public class EstacionamientoServiceImplUnitTest {
 	}
 	
 	@Test
-	public void salidaVehiculosServicioNoExiste() throws EstacionamientoException{
+	public void salidaVehiculosServicioNoExiste() throws EstacionamientoException, RemoteException{
 		when(serviciosRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("El servicio no existe.");
