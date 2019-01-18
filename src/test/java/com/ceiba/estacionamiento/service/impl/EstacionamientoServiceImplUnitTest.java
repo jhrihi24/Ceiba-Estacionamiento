@@ -28,9 +28,9 @@ import com.ceiba.estacionamiento.repository.ConfiguracionesCilindrajeRepository;
 import com.ceiba.estacionamiento.repository.ConfiguracionesIngresoRepository;
 import com.ceiba.estacionamiento.repository.PreciosRepository;
 import com.ceiba.estacionamiento.repository.ServiciosRepository;
+import com.ceiba.estacionamiento.trm.TRMService;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
-import com.ceiba.estacionamiento.validation.TRMService;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({EstacionamientoUtils.class})
