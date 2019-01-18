@@ -1,38 +1,23 @@
 package com.ceiba.estacionamiento.service.impl;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import com.ceiba.estacionamiento.dataBuilder.RegistrarVehiculoDTODataBuilder;
-import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
-
-@RunWith(SpringRunner.class)
+/*@RunWith(SpringRunner.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)*/
 public class EstacionamientoServiceImplIntegrationTest {
 	
-	@Rule
+	/*@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
-	/*@Autowired
-	private EstacionamientoServiceImpl estacionamientoServiceImpl;*/
+	@Autowired
+	private EstacionamientoServiceImpl estacionamientoServiceImpl;
 
 	private RegistrarVehiculoDTO registrarVehiculo;
 	
 	@Before
 	public void init(){
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().build();
-		//ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoMotos", 10);
-		//ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
+		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoMotos", 10);
+		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 	
 	@Test
