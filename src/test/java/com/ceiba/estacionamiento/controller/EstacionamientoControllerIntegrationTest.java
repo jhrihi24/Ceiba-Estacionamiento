@@ -43,6 +43,11 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
+	public void prueba(){
+		
+	}
+	
+	/*@Test
 	public void testARegistrarVehiculo() throws EstacionamientoException, InterruptedException{		
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
 		assertTrue(respuestaDTO.isSuccess());
@@ -74,7 +79,7 @@ public class EstacionamientoControllerIntegrationTest {
 		assertEquals(1, estacionamientoController.getServiciosActivos("TR").getData().size());
 	}
 	
-	/*@Test
+	@Test
 	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException{
 		param.put("idServicio", 0L);
 		exception.expect(EstacionamientoException.class);

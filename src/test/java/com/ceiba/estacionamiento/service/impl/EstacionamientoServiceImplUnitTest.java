@@ -91,6 +91,11 @@ public class EstacionamientoServiceImplUnitTest {
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 	
+	@Test
+	public void prueba(){
+		
+	}
+	
 	/*@Test
 	public void getServiciosActivosPlacaNull(){
 		when(serviciosRepository.findByServiciosActivos()).thenReturn(serviciosList);

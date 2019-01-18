@@ -40,6 +40,11 @@ public class EstacionamientoServiceImplIntegrationTest {
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 	
+	@Test
+	public void prueba(){
+		
+	}
+	
 	/*@Test
 	public void testARegistroVehiculos() throws EstacionamientoException{
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	

@@ -36,5 +36,4 @@ dependencies {
     testImplementation 'org.mockito:mockito-all:1.10.19'
     testImplementation 'org.powermock:powermock-api-mockito:1.6.4'
     testImplementation 'org.powermock:powermock-module-junit4:1.6.4'
-    testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
 }
