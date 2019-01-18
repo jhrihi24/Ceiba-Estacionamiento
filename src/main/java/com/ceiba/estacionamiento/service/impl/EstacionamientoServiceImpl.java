@@ -33,7 +33,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	private ConfiguracionesIngresoRepository configuracionesIngresoRepository;
 	private PreciosRepository preciosRepository;
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
-	//private TRMWebService trmWebService;
+	private TRMWebService trmWebService;
 	private EstacionamientoValidation estacionamientoValidation;
 	
 	@Value("${maximo.motos}")
@@ -50,7 +50,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
 		this.preciosRepository = preciosRepository;
 		this.configuracionesCilindrajeRepository= configuracionesCilindrajeRepository;
-		//this.trmWebService= trmWebService;
+		this.trmWebService= trmWebService;
 		this.estacionamientoValidation = estacionamientoValidation;		
 	}
 	
@@ -129,7 +129,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		Servicios servicios= optionalServicios.get();
 		
 		servicios.setCobrado(cobroTotal);
-		//servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrmActual()));
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrmActual()));
 		servicios.setFechaHoraSalida(new Date());
 		
 		return serviciosRepository.save(servicios);
