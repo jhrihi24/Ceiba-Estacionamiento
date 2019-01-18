@@ -60,38 +60,45 @@ public class EstacionamientoUtils {
 	}
 	
 	public static Boolean validarPlacaValida(String placa, TipoVehiculo tipoVehiculo){
-		if(tipoVehiculo==TipoVehiculo.CARRO){
-			//Placas particulares
-			if(placa.length()==6 && 
-				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 && 
-				placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==3)){
-				return Boolean.TRUE;			
-			}
+		
+		if(validacionPlacaTipoParticulares(tipoVehiculo, placa)){
+			return Boolean.TRUE;			
+		}
 			
-			//Placas de diplomaticos
-			if(placa.length()==6 && 
-				(placa.substring(0, 2).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==2 &&
-				placa.substring(2, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4)){
-				return Boolean.TRUE;
-			}
-			
-			//Placas de carga
-			if(placa.length()==5 &&
-				(placa.substring(0, 1).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1 &&
-				placa.substring(1, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4)){
-				return Boolean.TRUE;
-			}
+		if(validacionPlacaTipoDiplomaticos(tipoVehiculo, placa)){
+			return Boolean.TRUE;
 		}
 		
-		//Placas de moto
-		if(validacionTipoMoto(tipoVehiculo, placa)){
+		if(validacionPlacaTipoCarga(tipoVehiculo, placa)){
+			return Boolean.TRUE;
+		}		
+		
+		if(validacionPlacaTipoMoto(tipoVehiculo, placa)){
 			return Boolean.TRUE;
 		}
 		
 		return Boolean.FALSE;		
 	}
 	
-	private static Boolean validacionTipoMoto(TipoVehiculo tipoVehiculo, String placa){
+	private static Boolean validacionPlacaTipoParticulares(TipoVehiculo tipoVehiculo, String placa){
+		return tipoVehiculo==TipoVehiculo.CARRO && placa.length()==6 && 
+				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 && 
+				placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==3);
+	}
+	
+	private static Boolean validacionPlacaTipoDiplomaticos(TipoVehiculo tipoVehiculo, String placa){
+		return tipoVehiculo==TipoVehiculo.CARRO && placa.length()==6 && 
+				(placa.substring(0, 2).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==2 &&
+				placa.substring(2, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4);
+	}
+	
+	private static Boolean validacionPlacaTipoCarga(TipoVehiculo tipoVehiculo, String placa){
+		return tipoVehiculo==TipoVehiculo.CARRO && placa.length()==5 &&
+				(placa.substring(0, 1).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1 &&
+				placa.substring(1, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4);
+	}
+	
+	private static Boolean validacionPlacaTipoMoto(TipoVehiculo tipoVehiculo, String placa){
 		return tipoVehiculo==TipoVehiculo.MOTO && placa.length()==6 &&
 				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 &&
 				placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==2 &&
