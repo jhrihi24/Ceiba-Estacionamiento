@@ -81,7 +81,7 @@ public class EstacionamientoControllerIntegrationTest {
 	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException, RemoteException{
 		param.put("idServicio", 0L);
 		exception.expect(EstacionamientoException.class);
-		//exception.expectMessage("El servicio no existed.");
+		//exception.expectMessage("El servicio no existe.");
 		estacionamientoController.salidaVehiculo(param);
 	}
 	

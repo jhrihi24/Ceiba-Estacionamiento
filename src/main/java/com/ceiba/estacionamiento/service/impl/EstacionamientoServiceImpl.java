@@ -70,10 +70,10 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
 			throw new EstacionamientoException("La placa ingresada no cuenta con el formato valido.");
 		}		
-		if(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())>0){
+		if(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())>0){
 			throw new EstacionamientoException("Ya se encuentra un veh\u00EDculo con esa placa en el estacionamiento.");
 		}		
-		Long vehiculosIngresados= serviciosRepository.countByVehiculoIngresado(tipoVehiculo);
+		Long vehiculosIngresados= serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo);
 		if((tipoVehiculo.equals(TipoVehiculo.CARRO) && vehiculosIngresados.intValue()==maximoCarros) || 
 				(tipoVehiculo.equals(TipoVehiculo.MOTO) && vehiculosIngresados.intValue()==maximoMotos)){
 			throw new EstacionamientoException("No hay cupo para el veh\u00EDculo.");
@@ -131,7 +131,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		
 		servicios.setCobrado(cobroTotal);
 		servicios.setFechaHoraSalida(new Date());
-		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, EstacionamientoUtils.cobroTRM(cobroTotal, trmService.getTrm())));
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmService.getTrm()));
 		
 		return serviciosRepository.save(servicios);
 	}	

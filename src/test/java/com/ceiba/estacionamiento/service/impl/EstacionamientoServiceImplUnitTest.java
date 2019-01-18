@@ -116,8 +116,8 @@ public class EstacionamientoServiceImplUnitTest {
 		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(2);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresado(tipoVehiculo)).thenReturn(0L);
+		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
+		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(0L);
 		when(configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo)).thenReturn(configuracionesIngresoList);
 		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList)).thenReturn(Boolean.TRUE);		
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
@@ -135,7 +135,7 @@ public class EstacionamientoServiceImplUnitTest {
 		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(2);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(1L);
+		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(1L);
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
@@ -147,8 +147,8 @@ public class EstacionamientoServiceImplUnitTest {
 		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(1);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresado(tipoVehiculo)).thenReturn(10L);
+		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
+		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(10L);
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("No hay cupo para el vehiculo.");
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
@@ -160,8 +160,8 @@ public class EstacionamientoServiceImplUnitTest {
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withCilindraje(0).build();
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresado(tipoVehiculo)).thenReturn(20L);
+		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
+		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(20L);
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("No hay cupo para el vehiculo.");
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
@@ -173,8 +173,8 @@ public class EstacionamientoServiceImplUnitTest {
 		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(1);		
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresado(tipoVehiculo)).thenReturn(0L);
+		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
+		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(0L);
 		when(configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo)).thenReturn(configuracionesIngresoList);
 		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList)).thenReturn(Boolean.FALSE);		
 		exception.expect(EstacionamientoException.class);
@@ -232,7 +232,7 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.cobroDia(new BigDecimal(4000), cantidadHoras)).thenReturn(new BigDecimal(4000));		
 		when(configuracionesCilindrajeRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo())).thenReturn(configuracionesCilindrajeList);		
 		PowerMockito.when(EstacionamientoUtils.cobroTRM(BigDecimal.valueOf(7500), BigDecimal.valueOf(3000))).thenReturn(BigDecimal.valueOf(1.83));
-		when(serviciosRepository.save(optionalServicios.get())).thenReturn(optionalServicios.get());
+		when(serviciosRepository.save(optionalServicios.get())).thenReturn(optionalServicios.get());		
 		
 		assertEquals(BigDecimal.valueOf(7500), estacionamientoServiceImpl.salidaVehiculo(1L, fechaActual).getCobrado());
 	}

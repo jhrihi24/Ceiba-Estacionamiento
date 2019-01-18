@@ -13,11 +13,11 @@ import com.ceiba.estacionamiento.enums.TipoVehiculo;
 @Repository
 public interface ServiciosRepository extends JpaRepository<Servicios, Long>{
 	
-	@Query("SELECT COUNT(s.id) FROM Servicios s WHERE s.tipoVehiculo = :tipoVehiculo ")
-	Long countByVehiculoIngresado(@Param("tipoVehiculo") TipoVehiculo tipoVehiculo);
+	@Query("SELECT COUNT(s.id) FROM Servicios s WHERE s.tipoVehiculo = :tipoVehiculo AND s.fechaHoraSalida IS NULL AND s.cobrado IS NULL")
+	Long countByVehiculoIngresadoActivos(@Param("tipoVehiculo") TipoVehiculo tipoVehiculo);
 	
 	@Query("SELECT COUNT(s.id) FROM Servicios s WHERE s.placa = :placa AND s.fechaHoraSalida IS NULL AND s.cobrado IS NULL")
-	Long countByPlacaSinSalir(@Param("placa") String placa);
+	Long countByPlacaActivos(@Param("placa") String placa);
 	
 	@Query("SELECT s FROM Servicios s WHERE s.fechaHoraSalida IS NULL AND s.cobrado IS NULL ")
 	List<Servicios> findByServiciosActivos();
