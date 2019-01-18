@@ -78,8 +78,8 @@ public class EstacionamientoServiceImplUnitTest {
 	}
 	
 	@Test
-	public void getServiciosActivosPlacaNull(){
-		when(serviciosRepository.findByServiciosActivos()).thenReturn(serviciosList);
-		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos(null).size());
+	public void getServiciosActivosBusquedaPlaca(){
+		when(serviciosRepository.findByServiciosActivosPlaca("CB")).thenReturn(serviciosList);
+		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("CB").size());
 	}
 }
