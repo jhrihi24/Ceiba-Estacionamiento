@@ -40,7 +40,7 @@ public class EstacionamientoServiceImplIntegrationTest {
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 	
-	@Test
+	/*@Test
 	public void testARegistroVehiculos() throws EstacionamientoException{
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
 	}
@@ -82,5 +82,5 @@ public class EstacionamientoServiceImplIntegrationTest {
 	@Test
 	public void testHSalidaVehiculoSuccess() throws EstacionamientoException{
 		assertEquals("1000.00", estacionamientoServiceImpl.salidaVehiculo(1L, new Date()).getCobrado().toString());
-	}
+	}*/
 }

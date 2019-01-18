@@ -50,14 +50,14 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testBRegistrarVehiculo() throws EstacionamientoException, InterruptedException{	
+	public void testBRegistrarVehiculoPlacaDuplicada() throws EstacionamientoException, InterruptedException{	
 		exception.expect(EstacionamientoException.class);
 		//exception.expectMessage("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
 		estacionamientoController.registrarVehiculo(registrarVehiculo);
 	}
 	
 	@Test
-	public void testCRegistrarVehiculo() throws EstacionamientoException{
+	public void testCRegistrarVehiculoPlacaSinIngresar() throws EstacionamientoException{
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("").build();
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
 		assertFalse(respuestaDTO.isSuccess());
@@ -70,11 +70,11 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testEGetServiciosActivosSinPlaca(){
+	public void testEGetServiciosActivosConPlaca(){
 		assertEquals(1, estacionamientoController.getServiciosActivos("TR").getData().size());
 	}
 	
-	@Test
+	/*@Test
 	public void testFSalidaVehiculoNoEncontrado() throws EstacionamientoException{
 		param.put("idServicio", 0L);
 		exception.expect(EstacionamientoException.class);
@@ -87,6 +87,6 @@ public class EstacionamientoControllerIntegrationTest {
 		param.put("idServicio", 1L);
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
 		assertTrue(respuestaDTO.isSuccess());
-	}
+	}*/
 		
 }

@@ -91,7 +91,7 @@ public class EstacionamientoServiceImplUnitTest {
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 	
-	@Test
+	/*@Test
 	public void getServiciosActivosPlacaNull(){
 		when(serviciosRepository.findByServiciosActivos()).thenReturn(serviciosList);
 		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos(null).size());
@@ -236,6 +236,6 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.cobroTRM(BigDecimal.valueOf(7500), BigDecimal.valueOf(3000))).thenReturn(BigDecimal.valueOf(1.83));
 		
 		assertEquals(BigDecimal.valueOf(7500), estacionamientoServiceImpl.salidaVehiculo(1L, fechaActual).getCobrado());
-	}
+	}*/
 	
 }
