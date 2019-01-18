@@ -1,6 +1,6 @@
 package com.ceiba.estacionamiento.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +12,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ceiba.estacionamiento.dataBuilder.RegistrarVehiculoDTODataBuilder;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
-import com.ceiba.estacionamiento.dto.RespuestaDTO;
-import com.ceiba.estacionamiento.exception.EstacionamientoException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,8 +26,8 @@ public class EstacionamientoControllerIntegrationTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
-	@Autowired
-	private EstacionamientoController estacionamientoController;
+	/*@Autowired
+	private EstacionamientoController estacionamientoController;*/
 	
 	private RegistrarVehiculoDTO registrarVehiculo;
 	
