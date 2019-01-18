@@ -3,7 +3,9 @@ package com.ceiba.estacionamiento.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,16 +16,23 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.ceiba.estacionamiento.dataBuilder.ConfiguracionesCilindrajeDataBuilder;
+import com.ceiba.estacionamiento.dataBuilder.PreciosDataBuilder;
 import com.ceiba.estacionamiento.dataBuilder.RegistrarVehiculoDTODataBuilder;
 import com.ceiba.estacionamiento.dataBuilder.ServiciosDataBuilder;
 import com.ceiba.estacionamiento.domain.ConfiguracionesCilindraje;
+import com.ceiba.estacionamiento.domain.ConfiguracionesIngreso;
 import com.ceiba.estacionamiento.domain.Precios;
 import com.ceiba.estacionamiento.domain.Servicios;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
+import com.ceiba.estacionamiento.enums.TipoCobro;
+import com.ceiba.estacionamiento.enums.TipoVehiculo;
+import com.ceiba.estacionamiento.exception.EstacionamientoException;
 import com.ceiba.estacionamiento.repository.ConfiguracionesCilindrajeRepository;
 import com.ceiba.estacionamiento.repository.ConfiguracionesIngresoRepository;
 import com.ceiba.estacionamiento.repository.PreciosRepository;
@@ -100,7 +109,7 @@ public class EstacionamientoServiceImplUnitTest {
 		assertEquals(1, estacionamientoServiceImpl.getServiciosActivos("CB").size());
 	}
 	
-	/*@Test
+	@Test
 	public void registrarVehiculoSuccess() throws EstacionamientoException{
 		List<ConfiguracionesIngreso> configuracionesIngresoList= new ArrayList<>();
 		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(2);
@@ -197,7 +206,7 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.cobroHora(new BigDecimal(500), cantidadHoras)).thenReturn(new BigDecimal(1500));
 		PowerMockito.when(EstacionamientoUtils.cobroDia(new BigDecimal(4000), cantidadHoras)).thenReturn(new BigDecimal(4000));
 		when(serviciosRepository.save(optionalServicios.get())).thenReturn(optionalServicios.get());
-		when(trmWebService.getTrmActual()).thenReturn(BigDecimal.valueOf(3000));
+		when(trmWebService.getTrm()).thenReturn(BigDecimal.valueOf(3000));
 		PowerMockito.when(EstacionamientoUtils.cobroTRM(BigDecimal.valueOf(5500), BigDecimal.valueOf(3000))).thenReturn(BigDecimal.valueOf(1.83));
 		
 		assertEquals(BigDecimal.valueOf(5500), estacionamientoServiceImpl.salidaVehiculo(1L, fechaActual).getCobrado());
@@ -223,11 +232,11 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.cobroDia(new BigDecimal(4000), cantidadHoras)).thenReturn(new BigDecimal(4000));		
 		when(configuracionesCilindrajeRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo())).thenReturn(configuracionesCilindrajeList);		
 		when(serviciosRepository.save(optionalServicios.get())).thenReturn(optionalServicios.get());
-		when(trmWebService.getTrmActual()).thenReturn(BigDecimal.valueOf(3000));
+		when(trmWebService.getTrm()).thenReturn(BigDecimal.valueOf(3000));
 		PowerMockito.when(EstacionamientoUtils.cobroTRM(BigDecimal.valueOf(7500), BigDecimal.valueOf(3000))).thenReturn(BigDecimal.valueOf(1.83));
 		
 		assertEquals(BigDecimal.valueOf(7500), estacionamientoServiceImpl.salidaVehiculo(1L, fechaActual).getCobrado());
-	}*/
+	}
 	
 }
 
