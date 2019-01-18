@@ -34,7 +34,6 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	private ConfiguracionesIngresoRepository configuracionesIngresoRepository;
 	private PreciosRepository preciosRepository;
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
-	private TRMService trmWebService;
 	private EstacionamientoValidation estacionamientoValidation;
 	
 	@Value("${maximo.motos}")
@@ -51,7 +50,6 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
 		this.preciosRepository = preciosRepository;
 		this.configuracionesCilindrajeRepository= configuracionesCilindrajeRepository;
-		this.trmWebService= trmWebService;
 		this.estacionamientoValidation = estacionamientoValidation;		
 	}
 	
@@ -93,7 +91,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	}
 	
 	@Transactional
-	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException, RemoteException{		
+	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException{		
 		Optional<Servicios> optionalServicios= serviciosRepository.findById(idServicio);
 		if(!optionalServicios.isPresent()){
 			throw new EstacionamientoException("El servicio no existe.");
@@ -130,7 +128,6 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		Servicios servicios= optionalServicios.get();
 		
 		servicios.setCobrado(cobroTotal);
-		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrm()));
 		servicios.setFechaHoraSalida(new Date());
 		
 		return serviciosRepository.save(servicios);

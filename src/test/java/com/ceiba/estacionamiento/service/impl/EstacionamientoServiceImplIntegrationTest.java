@@ -1,11 +1,31 @@
 package com.ceiba.estacionamiento.service.impl;
 
-/*@RunWith(SpringRunner.class)
+import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
+
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import com.ceiba.estacionamiento.dataBuilder.RegistrarVehiculoDTODataBuilder;
+import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
+import com.ceiba.estacionamiento.exception.EstacionamientoException;
+
+@RunWith(SpringRunner.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)*/
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EstacionamientoServiceImplIntegrationTest {
 	
-	/*@Rule
+	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
 	@Autowired
@@ -19,13 +39,8 @@ public class EstacionamientoServiceImplIntegrationTest {
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoMotos", 10);
 		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
-	
+		
 	@Test
-	public void prueba(){
-		assertTrue(Boolean.TRUE);
-	}
-	
-	/*@Test
 	public void testARegistroVehiculos() throws EstacionamientoException{
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
 	}
@@ -67,5 +82,5 @@ public class EstacionamientoServiceImplIntegrationTest {
 	@Test
 	public void testHSalidaVehiculoSuccess() throws EstacionamientoException{
 		assertEquals("1000.00", estacionamientoServiceImpl.salidaVehiculo(1L, new Date()).getCobrado().toString());
-	}*/
+	}
 }

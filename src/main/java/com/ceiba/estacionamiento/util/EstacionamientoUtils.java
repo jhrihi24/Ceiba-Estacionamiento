@@ -70,26 +70,26 @@ public final class EstacionamientoUtils {
 	
 	public static Boolean validarPlacaValida(String placa, TipoVehiculo tipoVehiculo){
 		
-		if(validacionPlacaTipoParticulares(tipoVehiculo, placa)){
+		if(tipoVehiculo==TipoVehiculo.CARRO && validacionPlacaTipoParticulares(placa)){
 			return Boolean.TRUE;			
 		}
 			
-		if(validacionPlacaTipoDiplomaticos(tipoVehiculo, placa)){
+		if(tipoVehiculo==TipoVehiculo.CARRO && validacionPlacaTipoDiplomaticos(placa)){
 			return Boolean.TRUE;
 		}
 		
-		if(validacionPlacaTipoCarga(tipoVehiculo, placa)){
+		if(tipoVehiculo==TipoVehiculo.CARRO && validacionPlacaTipoCarga(placa)){
 			return Boolean.TRUE;
 		}		
 		
-		if(validacionPlacaTipoMoto(tipoVehiculo, placa)){
+		if(tipoVehiculo==TipoVehiculo.MOTO && validacionPlacaTipoMoto(placa)){
 			return Boolean.TRUE;
 		}
 		
 		return Boolean.FALSE;		
 	}
 	
-	private static Boolean validacionPlacaTipoParticulares(TipoVehiculo tipoVehiculo, String placa){		
+	private static Boolean validacionPlacaTipoParticulares(String placa){		
 		mapLetras.put(INICIO, 0);
 		mapLetras.put(FINAL, 3);
 		mapLetras.put(TOTAL, 3);		
@@ -98,10 +98,10 @@ public final class EstacionamientoUtils {
 		mapNumeros.put(FINAL, 6);
 		mapNumeros.put(TOTAL, 3);
 		
-		return tipoVehiculo==TipoVehiculo.CARRO && validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros);
+		return placa.length()==6 && validacionComposicionPlaca(placa, mapLetras, mapNumeros);
 	}
 	
-	private static Boolean validacionPlacaTipoDiplomaticos(TipoVehiculo tipoVehiculo, String placa){
+	private static Boolean validacionPlacaTipoDiplomaticos(String placa){
 		mapLetras.put(INICIO, 0);
 		mapLetras.put(FINAL, 2);
 		mapLetras.put(TOTAL, 2);
@@ -110,10 +110,10 @@ public final class EstacionamientoUtils {
 		mapNumeros.put(FINAL, 6);
 		mapNumeros.put(TOTAL, 4);		
 		
-		return tipoVehiculo==TipoVehiculo.CARRO && validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros);
+		return placa.length()==6 && validacionComposicionPlaca(placa, mapLetras, mapNumeros);
 	}
 	
-	private static Boolean validacionPlacaTipoCarga(TipoVehiculo tipoVehiculo, String placa){
+	private static Boolean validacionPlacaTipoCarga(String placa){
 		mapLetras.put(INICIO, 0);
 		mapLetras.put(FINAL, 1);
 		mapLetras.put(TOTAL, 1);
@@ -122,10 +122,10 @@ public final class EstacionamientoUtils {
 		mapNumeros.put(FINAL, 5);
 		mapNumeros.put(TOTAL, 4);
 		
-		return tipoVehiculo==TipoVehiculo.CARRO &&validacionComposicionPlaca(placa, 5, mapLetras, mapNumeros);
+		return placa.length()==5 &&validacionComposicionPlaca(placa, mapLetras, mapNumeros);
 	}
 	
-	private static Boolean validacionPlacaTipoMoto(TipoVehiculo tipoVehiculo, String placa){
+	private static Boolean validacionPlacaTipoMoto(String placa){
 		mapLetras.put(INICIO, 0);
 		mapLetras.put(FINAL, 3);
 		mapLetras.put(TOTAL, 3);
@@ -134,14 +134,13 @@ public final class EstacionamientoUtils {
 		mapNumeros.put(FINAL, 5);
 		mapNumeros.put(TOTAL, 2);
 		
-		return tipoVehiculo==TipoVehiculo.MOTO && 
-				validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros) &&
+		return placa.length()==6 && 
+				validacionComposicionPlaca(placa, mapLetras, mapNumeros) &&
 				placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1;
 	}
 	
-	private static Boolean validacionComposicionPlaca(String placa, Integer longitudPlaca, Map<String, Integer> mapLetras, Map<String, Integer> mapNumeros){
-		return placa.length()==longitudPlaca &&
-				placa.substring(mapLetras.get(INICIO), mapLetras.get(FINAL)).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==mapLetras.get(TOTAL) &&
+	private static Boolean validacionComposicionPlaca(String placa, Map<String, Integer> mapLetras, Map<String, Integer> mapNumeros){
+		return placa.substring(mapLetras.get(INICIO), mapLetras.get(FINAL)).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==mapLetras.get(TOTAL) &&
 				placa.substring(mapNumeros.get(INICIO), mapNumeros.get(FINAL)).chars().filter(ch -> ch >= '0' && ch <= '9').count()==mapNumeros.get(TOTAL);
 	}
 	

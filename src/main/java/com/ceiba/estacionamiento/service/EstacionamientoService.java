@@ -1,6 +1,5 @@
 package com.ceiba.estacionamiento.service;
 
-import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +13,6 @@ public interface EstacionamientoService {
 	
 	public void registarVehiculo(RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException;
 	
-	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException, RemoteException;
+	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException;
 	
 }
