@@ -22,9 +22,9 @@ import com.ceiba.estacionamiento.repository.ConfiguracionesIngresoRepository;
 import com.ceiba.estacionamiento.repository.PreciosRepository;
 import com.ceiba.estacionamiento.repository.ServiciosRepository;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
-import com.ceiba.estacionamiento.trm.TRMWebService;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
+import com.ceiba.estacionamiento.validation.TRMService;
 
 @Service
 public class EstacionamientoServiceImpl implements EstacionamientoService{
@@ -33,7 +33,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	private ConfiguracionesIngresoRepository configuracionesIngresoRepository;
 	private PreciosRepository preciosRepository;
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
-	private TRMWebService trmWebService;
+	private TRMService trmWebService;
 	private EstacionamientoValidation estacionamientoValidation;
 	
 	@Value("${maximo.motos}")
@@ -44,7 +44,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	
 	@Autowired	
 	public EstacionamientoServiceImpl(ServiciosRepository serviciosRepository, ConfiguracionesIngresoRepository configuracionesIngresoRepository, 
-			TRMWebService trmWebService, PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, 
+			TRMService trmWebService, PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, 
 			ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository) {
 		this.serviciosRepository = serviciosRepository;
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
@@ -129,7 +129,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		Servicios servicios= optionalServicios.get();
 		
 		servicios.setCobrado(cobroTotal);
-		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrmActual()));
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrm()));
 		servicios.setFechaHoraSalida(new Date());
 		
 		return serviciosRepository.save(servicios);
