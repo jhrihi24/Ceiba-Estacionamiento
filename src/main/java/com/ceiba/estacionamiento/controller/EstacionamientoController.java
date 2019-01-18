@@ -1,5 +1,6 @@
 package com.ceiba.estacionamiento.controller;
 
+import java.rmi.RemoteException;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
@@ -55,7 +56,7 @@ public class EstacionamientoController extends AbstractController{
 	}
 	
 	@PutMapping
-	public RespuestaDTO<String> salidaVehiculo(@RequestBody Map<String, Long> param) throws EstacionamientoException{
+	public RespuestaDTO<String> salidaVehiculo(@RequestBody Map<String, Long> param) throws EstacionamientoException, RemoteException{
 		Date fechaActual= new Date();
 		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
 		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);		

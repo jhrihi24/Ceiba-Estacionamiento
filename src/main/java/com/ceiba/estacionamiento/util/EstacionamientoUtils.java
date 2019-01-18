@@ -14,6 +14,10 @@ public final class EstacionamientoUtils {
 	private static Map<String, Integer> mapLetras= new HashMap<>();
 	private static Map<String, Integer> mapNumeros= new HashMap<>();
 	
+	private static final String INICIO= "inicio";
+	private static final String FINAL="final";
+	private static final String TOTAL="total";
+	
 	private EstacionamientoUtils() {
 	    throw new IllegalStateException("Utility class");
 	}
@@ -86,49 +90,49 @@ public final class EstacionamientoUtils {
 	}
 	
 	private static Boolean validacionPlacaTipoParticulares(TipoVehiculo tipoVehiculo, String placa){		
-		mapLetras.put("inicio", 0);
-		mapLetras.put("final", 3);
-		mapLetras.put("total", 3);		
+		mapLetras.put(INICIO, 0);
+		mapLetras.put(FINAL, 3);
+		mapLetras.put(TOTAL, 3);		
 		
-		mapNumeros.put("inicio", 3);
-		mapNumeros.put("final", 6);
-		mapNumeros.put("total", 3);
+		mapNumeros.put(INICIO, 3);
+		mapNumeros.put(FINAL, 6);
+		mapNumeros.put(TOTAL, 3);
 		
 		return tipoVehiculo==TipoVehiculo.CARRO && validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros);
 	}
 	
 	private static Boolean validacionPlacaTipoDiplomaticos(TipoVehiculo tipoVehiculo, String placa){
-		mapLetras.put("inicio", 0);
-		mapLetras.put("final", 2);
-		mapLetras.put("total", 2);
+		mapLetras.put(INICIO, 0);
+		mapLetras.put(FINAL, 2);
+		mapLetras.put(TOTAL, 2);
 		
-		mapNumeros.put("inicio", 2);
-		mapNumeros.put("final", 6);
-		mapNumeros.put("total", 4);		
+		mapNumeros.put(INICIO, 2);
+		mapNumeros.put(FINAL, 6);
+		mapNumeros.put(TOTAL, 4);		
 		
 		return tipoVehiculo==TipoVehiculo.CARRO && validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros);
 	}
 	
 	private static Boolean validacionPlacaTipoCarga(TipoVehiculo tipoVehiculo, String placa){
-		mapLetras.put("inicio", 0);
-		mapLetras.put("final", 1);
-		mapLetras.put("total", 1);
+		mapLetras.put(INICIO, 0);
+		mapLetras.put(FINAL, 1);
+		mapLetras.put(TOTAL, 1);
 		
-		mapNumeros.put("inicio", 1);
-		mapNumeros.put("final", 5);
-		mapNumeros.put("total", 4);
+		mapNumeros.put(INICIO, 1);
+		mapNumeros.put(FINAL, 5);
+		mapNumeros.put(TOTAL, 4);
 		
 		return tipoVehiculo==TipoVehiculo.CARRO &&validacionComposicionPlaca(placa, 5, mapLetras, mapNumeros);
 	}
 	
 	private static Boolean validacionPlacaTipoMoto(TipoVehiculo tipoVehiculo, String placa){
-		mapLetras.put("inicio", 0);
-		mapLetras.put("final", 3);
-		mapLetras.put("total", 3);
+		mapLetras.put(INICIO, 0);
+		mapLetras.put(FINAL, 3);
+		mapLetras.put(TOTAL, 3);
 		
-		mapNumeros.put("inicio", 3);
-		mapNumeros.put("final", 5);
-		mapNumeros.put("total", 2);
+		mapNumeros.put(INICIO, 3);
+		mapNumeros.put(FINAL, 5);
+		mapNumeros.put(TOTAL, 2);
 		
 		return tipoVehiculo==TipoVehiculo.MOTO && 
 				validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros) &&
@@ -137,8 +141,8 @@ public final class EstacionamientoUtils {
 	
 	private static Boolean validacionComposicionPlaca(String placa, Integer longitudPlaca, Map<String, Integer> mapLetras, Map<String, Integer> mapNumeros){
 		return placa.length()==longitudPlaca &&
-				placa.substring(mapLetras.get("inicio"), mapLetras.get("final")).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==mapLetras.get("total") &&
-				placa.substring(mapNumeros.get("inicio"), mapNumeros.get("final")).chars().filter(ch -> ch >= '0' && ch <= '9').count()==mapNumeros.get("total");
+				placa.substring(mapLetras.get(INICIO), mapLetras.get(FINAL)).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==mapLetras.get(TOTAL) &&
+				placa.substring(mapNumeros.get(INICIO), mapNumeros.get(FINAL)).chars().filter(ch -> ch >= '0' && ch <= '9').count()==mapNumeros.get(TOTAL);
 	}
 	
 }

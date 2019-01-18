@@ -93,7 +93,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	}
 	
 	@Transactional
-	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException{		
+	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException, RemoteException{		
 		Optional<Servicios> optionalServicios= serviciosRepository.findById(idServicio);
 		if(!optionalServicios.isPresent()){
 			throw new EstacionamientoException("El servicio no existe.");
@@ -125,19 +125,12 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 			}
 			
 			cobroTotal= cobroTotal.add(cobroAdicional);
-		}
-		
-		BigDecimal trm;
-		try{
-			trm= trmWebService.getTrm();
-		}catch (RemoteException e) {
-			trm= BigDecimal.valueOf(0);
-		}
+		}			
 		
 		Servicios servicios= optionalServicios.get();
 		
 		servicios.setCobrado(cobroTotal);
-		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trm));
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrm()));
 		servicios.setFechaHoraSalida(new Date());
 		
 		return serviciosRepository.save(servicios);
