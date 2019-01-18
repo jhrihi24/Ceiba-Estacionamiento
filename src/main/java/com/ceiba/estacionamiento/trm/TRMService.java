@@ -3,8 +3,6 @@ package com.ceiba.estacionamiento.trm;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import co.com.sc.nexura.superfinanciera.action.generic.services.trm.action.TCRMServicesInterfaceProxy;
@@ -13,7 +11,6 @@ import co.com.sc.nexura.superfinanciera.action.generic.services.trm.action.TcrmR
 @Component
 public class TRMService {
 	
-	static Logger perfLog = LoggerFactory.getLogger("");
 	private static final String WEB_SERVICE_URL = "https://www.superfinanciera.gov.co/SuperfinancieraWebServiceTRM/TCRMServicesWebService/TCRMServicesWebService?WSDL";
 	
 	public BigDecimal getTrm() {
@@ -23,7 +20,7 @@ public class TRMService {
 			TcrmResponse tcrmResponse = proxy.queryTCRM(null);
 			trm= BigDecimal.valueOf(tcrmResponse.getValue());
 		}catch (RemoteException e) {
-			perfLog.warn(e.getMessage());
+			System.out.println(e.getMessage());
 		}
 		
 		return trm;
