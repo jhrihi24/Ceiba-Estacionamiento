@@ -13,7 +13,7 @@ import co.com.sc.nexura.superfinanciera.action.generic.services.trm.action.TcrmR
 @Component
 public class TRMService {
 	
-	static Logger perfLog = LoggerFactory.getLogger(TRMService.class);
+	//static Logger perfLog = LoggerFactory.getLogger(TRMService.class);
 	private static final String WEB_SERVICE_URL = "https://www.superfinanciera.gov.co/SuperfinancieraWebServiceTRM/TCRMServicesWebService/TCRMServicesWebService?WSDL";
 	
 	public BigDecimal getTrm() {
@@ -23,7 +23,7 @@ public class TRMService {
 			TcrmResponse tcrmResponse = proxy.queryTCRM(null);
 			trm= BigDecimal.valueOf(tcrmResponse.getValue());
 		}catch (RemoteException e) {
-			perfLog.warn(e.getMessage());
+			//perfLog.warn(e.getMessage());
 		}
 		
 		return trm;
