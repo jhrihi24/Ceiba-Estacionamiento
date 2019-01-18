@@ -90,60 +90,8 @@ public class EstacionamientoUtils {
 			placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1)){
 			return Boolean.TRUE;
 		}
-		/*if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaParticularesPublicos(placa)){
-			return Boolean.TRUE;
-		}
-		if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaDiplomaticos(placa)){
-			return Boolean.TRUE;
-		}
-		if(tipoVehiculo==TipoVehiculo.CARRO && validarPlacaCarga(placa)){
-			return Boolean.TRUE;
-		}
-		if(tipoVehiculo==TipoVehiculo.MOTO && validarPlacaMoto(placa)){
-			return Boolean.TRUE;
-		}*/
+		
 		return Boolean.FALSE;		
-	}
-	
-	/*private static Boolean validarPlacaParticularesPublicos(String placa){
-		if(placa.length()==6){
-			long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-			long countNumeros= placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
-			return (countLetras==3 && countNumeros==3);
-		}
-		
-		return Boolean.FALSE;
-	}*/
-	
-	private static Boolean validarPlacaDiplomaticos(String placa){
-		if(placa.length()==6){
-			long countLetras= placa.substring(0, 2).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-			long countNumeros= placa.substring(2, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count();
-			return (countLetras==2 && countNumeros==4);
-		}
-		
-		return Boolean.FALSE;
-	}
-	
-	private static Boolean validarPlacaCarga(String placa){
-		if(placa.length()==5){
-			long countLetras= placa.substring(0, 1).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-			long countNumeros= placa.substring(1, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count();
-			return (countLetras==1 && countNumeros==4);
-		}
-		
-		return Boolean.FALSE;
-	}
-	
-	private static Boolean validarPlacaMoto(String placa){
-		if(placa.length()==6){
-			long countLetras= placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-			long countNumeros= placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count();
-			long countUltimaLetra= placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-			return (countLetras==3 && countNumeros==2 && countUltimaLetra==1);
-		}
-		
-		return Boolean.FALSE;
 	}
 	
 }
