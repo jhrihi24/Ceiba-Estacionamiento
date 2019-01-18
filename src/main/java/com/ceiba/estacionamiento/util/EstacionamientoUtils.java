@@ -4,10 +4,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ceiba.estacionamiento.enums.TipoVehiculo;
 
 public final class EstacionamientoUtils {
+	
+	private static Map<String, Integer> mapLetras= new HashMap<>();
+	private static Map<String, Integer> mapNumeros= new HashMap<>();
 	
 	private EstacionamientoUtils() {
 	    throw new IllegalStateException("Utility class");
@@ -80,29 +85,60 @@ public final class EstacionamientoUtils {
 		return Boolean.FALSE;		
 	}
 	
-	private static Boolean validacionPlacaTipoParticulares(TipoVehiculo tipoVehiculo, String placa){
-		return tipoVehiculo==TipoVehiculo.CARRO && placa.length()==6 && 
-				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 && 
-				placa.substring(3, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==3);
+	private static Boolean validacionPlacaTipoParticulares(TipoVehiculo tipoVehiculo, String placa){		
+		mapLetras.put("inicio", 0);
+		mapLetras.put("final", 3);
+		mapLetras.put("total", 3);		
+		
+		mapNumeros.put("inicio", 3);
+		mapNumeros.put("final", 6);
+		mapNumeros.put("total", 3);
+		
+		return tipoVehiculo==TipoVehiculo.CARRO && validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros);
 	}
 	
 	private static Boolean validacionPlacaTipoDiplomaticos(TipoVehiculo tipoVehiculo, String placa){
-		return tipoVehiculo==TipoVehiculo.CARRO && placa.length()==6 && 
-				(placa.substring(0, 2).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==2 &&
-				placa.substring(2, 6).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4);
+		mapLetras.put("inicio", 0);
+		mapLetras.put("final", 2);
+		mapLetras.put("total", 2);
+		
+		mapNumeros.put("inicio", 2);
+		mapNumeros.put("final", 6);
+		mapNumeros.put("total", 4);		
+		
+		return tipoVehiculo==TipoVehiculo.CARRO && validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros);
 	}
 	
 	private static Boolean validacionPlacaTipoCarga(TipoVehiculo tipoVehiculo, String placa){
-		return tipoVehiculo==TipoVehiculo.CARRO && placa.length()==5 &&
-				(placa.substring(0, 1).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1 &&
-				placa.substring(1, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==4);
+		mapLetras.put("inicio", 0);
+		mapLetras.put("final", 1);
+		mapLetras.put("total", 1);
+		
+		mapNumeros.put("inicio", 1);
+		mapNumeros.put("final", 5);
+		mapNumeros.put("total", 4);
+		
+		return tipoVehiculo==TipoVehiculo.CARRO &&validacionComposicionPlaca(placa, 5, mapLetras, mapNumeros);
 	}
 	
 	private static Boolean validacionPlacaTipoMoto(TipoVehiculo tipoVehiculo, String placa){
-		return tipoVehiculo==TipoVehiculo.MOTO && placa.length()==6 &&
-				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 &&
-				placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==2 &&
-				placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1);
+		mapLetras.put("inicio", 0);
+		mapLetras.put("final", 3);
+		mapLetras.put("total", 3);
+		
+		mapNumeros.put("inicio", 3);
+		mapNumeros.put("final", 5);
+		mapNumeros.put("total", 2);
+		
+		return tipoVehiculo==TipoVehiculo.MOTO && 
+				validacionComposicionPlaca(placa, 6, mapLetras, mapNumeros) &&
+				placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1;
+	}
+	
+	private static Boolean validacionComposicionPlaca(String placa, Integer longitudPlaca, Map<String, Integer> mapLetras, Map<String, Integer> mapNumeros){
+		return placa.length()==longitudPlaca &&
+				placa.substring(mapLetras.get("inicio"), mapLetras.get("final")).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==mapLetras.get("total") &&
+				placa.substring(mapNumeros.get("inicio"), mapNumeros.get("final")).chars().filter(ch -> ch >= '0' && ch <= '9').count()==mapNumeros.get("total");
 	}
 	
 }

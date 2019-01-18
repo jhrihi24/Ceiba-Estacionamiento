@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -190,7 +191,7 @@ public class EstacionamientoServiceImplUnitTest {
 	}
 	
 	@Test
-	public void cobroSinExcesoCilindraje() throws EstacionamientoException{
+	public void cobroSinExcesoCilindraje() throws EstacionamientoException, RemoteException{
 		Date fechaActual= new Date();
 		Long cantidadHoras= new Long(27);
 		preciosList.add(new PreciosDataBuilder().build());
@@ -213,7 +214,7 @@ public class EstacionamientoServiceImplUnitTest {
 	}
 	
 	@Test
-	public void cobroConExcesoCilindraje() throws EstacionamientoException{
+	public void cobroConExcesoCilindraje() throws EstacionamientoException, RemoteException{
 		Date fechaActual= new Date();
 		Long cantidadHoras= new Long(27);
 		preciosList.add(new PreciosDataBuilder().build());

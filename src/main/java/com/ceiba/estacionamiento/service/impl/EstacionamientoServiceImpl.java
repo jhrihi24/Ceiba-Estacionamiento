@@ -1,6 +1,7 @@
 package com.ceiba.estacionamiento.service.impl;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -126,10 +127,17 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 			cobroTotal= cobroTotal.add(cobroAdicional);
 		}
 		
+		BigDecimal trm;
+		try{
+			trm= trmWebService.getTrm();
+		}catch (RemoteException e) {
+			trm= BigDecimal.valueOf(0);
+		}
+		
 		Servicios servicios= optionalServicios.get();
 		
 		servicios.setCobrado(cobroTotal);
-		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmWebService.getTrm()));
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trm));
 		servicios.setFechaHoraSalida(new Date());
 		
 		return serviciosRepository.save(servicios);
