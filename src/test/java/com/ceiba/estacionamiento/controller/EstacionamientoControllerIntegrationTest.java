@@ -23,12 +23,12 @@ import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.exception.EstacionamientoException;
 
-@RunWith(SpringRunner.class)
+/*@RunWith(SpringRunner.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)*/
 public class EstacionamientoControllerIntegrationTest {
 	
-	@Rule
+	/*@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
 	@Autowired
@@ -89,6 +89,6 @@ public class EstacionamientoControllerIntegrationTest {
 		param.put("idServicio", 1L);
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
 		assertTrue(respuestaDTO.isSuccess());
-	}
+	}*/
 		
 }

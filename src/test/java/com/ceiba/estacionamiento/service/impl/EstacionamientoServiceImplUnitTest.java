@@ -38,6 +38,7 @@ import com.ceiba.estacionamiento.repository.ConfiguracionesCilindrajeRepository;
 import com.ceiba.estacionamiento.repository.ConfiguracionesIngresoRepository;
 import com.ceiba.estacionamiento.repository.PreciosRepository;
 import com.ceiba.estacionamiento.repository.ServiciosRepository;
+import com.ceiba.estacionamiento.trm.TRMService;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
 import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
 
@@ -59,6 +60,9 @@ public class EstacionamientoServiceImplUnitTest {
 	
 	@Mock
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
+	
+	@Mock
+	private TRMService trmService;
 	
 	@Mock
 	private EstacionamientoValidation estacionamientoValidation;
@@ -202,6 +206,7 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.calcularHorasEntreFechas(optionalServicios.get().getFechaHoraIngreso(), fechaActual)).thenReturn(cantidadHoras);
 		PowerMockito.when(EstacionamientoUtils.cobroHora(new BigDecimal(500), cantidadHoras)).thenReturn(new BigDecimal(1500));
 		PowerMockito.when(EstacionamientoUtils.cobroDia(new BigDecimal(4000), cantidadHoras)).thenReturn(new BigDecimal(4000));
+		PowerMockito.when(EstacionamientoUtils.cobroTRM(BigDecimal.valueOf(5500), BigDecimal.valueOf(3000))).thenReturn(BigDecimal.valueOf(1.83));
 		when(serviciosRepository.save(optionalServicios.get())).thenReturn(optionalServicios.get());
 		
 		assertEquals(BigDecimal.valueOf(5500), estacionamientoServiceImpl.salidaVehiculo(1L, fechaActual).getCobrado());
@@ -226,6 +231,7 @@ public class EstacionamientoServiceImplUnitTest {
 		PowerMockito.when(EstacionamientoUtils.cobroHora(new BigDecimal(500), cantidadHoras)).thenReturn(new BigDecimal(1500));
 		PowerMockito.when(EstacionamientoUtils.cobroDia(new BigDecimal(4000), cantidadHoras)).thenReturn(new BigDecimal(4000));		
 		when(configuracionesCilindrajeRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo())).thenReturn(configuracionesCilindrajeList);		
+		PowerMockito.when(EstacionamientoUtils.cobroTRM(BigDecimal.valueOf(7500), BigDecimal.valueOf(3000))).thenReturn(BigDecimal.valueOf(1.83));
 		when(serviciosRepository.save(optionalServicios.get())).thenReturn(optionalServicios.get());
 		
 		assertEquals(BigDecimal.valueOf(7500), estacionamientoServiceImpl.salidaVehiculo(1L, fechaActual).getCobrado());

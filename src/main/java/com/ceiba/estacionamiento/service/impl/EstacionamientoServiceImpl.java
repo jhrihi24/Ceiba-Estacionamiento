@@ -1,6 +1,7 @@
 package com.ceiba.estacionamiento.service.impl;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	private ConfiguracionesIngresoRepository configuracionesIngresoRepository;
 	private PreciosRepository preciosRepository;
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
+	private TRMService trmService;
 	private EstacionamientoValidation estacionamientoValidation;
 	
 	@Value("${maximo.motos}")
@@ -44,12 +46,13 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	@Autowired	
 	public EstacionamientoServiceImpl(ServiciosRepository serviciosRepository, ConfiguracionesIngresoRepository configuracionesIngresoRepository, 
 			TRMService trmWebService, PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, 
-			ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository) {
+			ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository, TRMService trmService) {
 		this.serviciosRepository = serviciosRepository;
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
 		this.preciosRepository = preciosRepository;
 		this.configuracionesCilindrajeRepository= configuracionesCilindrajeRepository;
-		this.estacionamientoValidation = estacionamientoValidation;		
+		this.estacionamientoValidation = estacionamientoValidation;
+		this.trmService= trmService;
 	}
 	
 	@Transactional(readOnly = true)
@@ -64,9 +67,9 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	@Transactional
 	public void registarVehiculo(RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException {
 		TipoVehiculo tipoVehiculo= registrarVehiculo.getCilindraje()==0 ? TipoVehiculo.CARRO: TipoVehiculo.MOTO;
-		/*if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
+		if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
 			throw new EstacionamientoException("La placa ingresada no cuenta con el formato valido.");
-		}*/		
+		}		
 		if(serviciosRepository.countByPlacaSinSalir(registrarVehiculo.getPlaca())>0){
 			throw new EstacionamientoException("Ya se encuentra un veh\u00EDculo con esa placa en el estacionamiento.");
 		}		
@@ -84,13 +87,13 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		servicios.setPlaca(registrarVehiculo.getPlaca());
 		servicios.setCilindraje(registrarVehiculo.getCilindraje());
 		servicios.setFechaHoraIngreso(new Date());
-		servicios.setTipoVehiculo(tipoVehiculo);
+		servicios.setTipoVehiculo(tipoVehiculo);		
 		
 		serviciosRepository.save(servicios);
 	}
 	
 	@Transactional
-	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException{		
+	public Servicios salidaVehiculo(Long idServicio, Date fechaActual) throws EstacionamientoException, RemoteException{		
 		Optional<Servicios> optionalServicios= serviciosRepository.findById(idServicio);
 		if(!optionalServicios.isPresent()){
 			throw new EstacionamientoException("El servicio no existe.");
@@ -128,6 +131,7 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		
 		servicios.setCobrado(cobroTotal);
 		servicios.setFechaHoraSalida(new Date());
+		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, EstacionamientoUtils.cobroTRM(cobroTotal, trmService.getTrm())));
 		
 		return serviciosRepository.save(servicios);
 	}	

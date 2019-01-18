@@ -56,12 +56,13 @@ public class EstacionamientoController extends AbstractController{
 	}
 	
 	@PutMapping
-	public RespuestaDTO<String> salidaVehiculo(@RequestBody Map<String, Long> param) throws EstacionamientoException{
+	public RespuestaDTO<String> salidaVehiculo(@RequestBody Map<String, Long> param) throws EstacionamientoException, RemoteException{
 		Date fechaActual= new Date();
 		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
 		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);		
 		respuesta.setMensaje("El total a pagar por el veh\u00EDculo con placa "+servicios.getPlaca()+" es: "+
-				NumberFormat.getCurrencyInstance(new Locale("es","CO")).format(servicios.getCobrado()));	
+				NumberFormat.getCurrencyInstance(new Locale("es","CO")).format(servicios.getCobrado())+ 
+				"USD: "+NumberFormat.getCurrencyInstance(Locale.US).format(servicios.getCobradoUSD()));	
 		return respuesta;
 	}
 	

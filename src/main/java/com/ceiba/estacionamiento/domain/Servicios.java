@@ -45,6 +45,8 @@ public class Servicios implements Serializable{
 	
 	private BigDecimal cobrado;
 	
+	private BigDecimal cobradoUSD;
+	
 	public Long getId() {
 		return id;
 	}
@@ -100,4 +102,14 @@ public class Servicios implements Serializable{
 	public void setTipoVehiculo(TipoVehiculo tipoVehiculo) {
 		this.tipoVehiculo = tipoVehiculo;
 	}
+
+	public BigDecimal getCobradoUSD() {
+		return cobradoUSD;
+	}
+
+	public void setCobradoUSD(BigDecimal cobradoUSD) {
+		this.cobradoUSD = cobradoUSD;
+	}
+	
+	
 }
