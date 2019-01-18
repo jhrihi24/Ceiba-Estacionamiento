@@ -84,14 +84,18 @@ public class EstacionamientoUtils {
 		}
 		
 		//Placas de moto
-		if(tipoVehiculo==TipoVehiculo.MOTO && placa.length()==6 &&
-			(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 &&
-			placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==2 &&
-			placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1)){
+		if(validacionTipoMoto(tipoVehiculo, placa)){
 			return Boolean.TRUE;
 		}
 		
 		return Boolean.FALSE;		
+	}
+	
+	private static Boolean validacionTipoMoto(TipoVehiculo tipoVehiculo, String placa){
+		return tipoVehiculo==TipoVehiculo.MOTO && placa.length()==6 &&
+				(placa.substring(0, 3).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==3 &&
+				placa.substring(3, 5).chars().filter(ch -> ch >= '0' && ch <= '9').count()==2 &&
+				placa.substring(5, 6).chars().filter(ch -> ch >= 'A' && ch <= 'Z').count()==1);
 	}
 	
 }
