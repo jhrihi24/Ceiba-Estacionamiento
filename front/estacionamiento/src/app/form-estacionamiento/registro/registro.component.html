@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-12">
                 <label>Placa</label>
-                <input type="text" class="form-control" [(ngModel)]="registroVehiculo.placa" placeholder="Ingrese el nro de placa"
+                <input type="text" class="form-control" id="placaRegistro" [(ngModel)]="registroVehiculo.placa" placeholder="Ingrese el nro de placa"
                     (keyup)="this.registroVehiculo.placa = this.registroVehiculo.placa.toUpperCase();"/>
             </div>
         </div>
@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-12">
                 <label>Cilindraje (En caso de motocicleta)</label>
-                <input type="number" class="form-control" [(ngModel)]="registroVehiculo.cilindraje" placeholder="Ingrese el cilindraje"/>
+                <input type="number" class="form-control" id="cilindrajeRegistro" [(ngModel)]="registroVehiculo.cilindraje" placeholder="Ingrese el cilindraje"/>
             </div>
         </div>
         <div class="espacio-normal"></div>
