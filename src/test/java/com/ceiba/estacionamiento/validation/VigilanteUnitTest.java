@@ -11,12 +11,15 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.ceiba.estacionamiento.dataBuilder.ConfiguracionesIngresoDataBuilder;
 import com.ceiba.estacionamiento.dataBuilder.RegistrarVehiculoDTODataBuilder;
@@ -24,44 +27,56 @@ import com.ceiba.estacionamiento.domain.ConfiguracionesIngreso;
 import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.enums.TipoValidacion;
+import com.ceiba.estacionamiento.enums.TipoVehiculo;
+import com.ceiba.estacionamiento.exception.EstacionamientoException;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
-
+import com.ceiba.estacionamiento.validation.Vigilante;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(EstacionamientoUtils.class)
-public class EstacionamientoValidationUnitTest {
+public class VigilanteUnitTest {
+	
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
 	
 	@InjectMocks
-	private EstacionamientoValidation estacionamientoValidation;
+	private Vigilante vigilante;
 		
 	private RegistrarVehiculoDTO registrarVehiculo;
 	private ConfiguracionesIngreso configuracionesIngreso;
 	private List<ConfiguracionesIngreso> configuracionesIngresoList;
+	private TipoVehiculo tipoVehiculo;
 	
 	@Before
 	public void init(){
 		configuracionesIngresoList= new ArrayList<>();
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("").build();
+		ReflectionTestUtils.setField(vigilante, "maximoMotos", 10);
+		ReflectionTestUtils.setField(vigilante, "maximoCarros", 20);
+		tipoVehiculo= TipoVehiculo.toTipoVehiculo(2);
 	}
 	
 	@Test
-	public void validarCamposRegistroVehiculo(){
-		RespuestaDTO<String> respuesta= estacionamientoValidation.validarCamposRegistroVehiculo(registrarVehiculo);
-		assertEquals("Debe ingresar una placa", respuesta.getMensaje());
+	public void validarRegistroVehiculoIngresarPlaca() throws EstacionamientoException{
+		exception.expect(EstacionamientoException.class);
+		exception.expectMessage("Debe ingresar una placa");
+		vigilante.validarRegistroVehiculo(registrarVehiculo, tipoVehiculo, 0L, 0L);		
 	}
 	
 	@Test
-	public void validarIngresoVehiculoTipoValidacionInicioFALSE(){
+	public void validarIngresoVehiculoTipoValidacionInicioFALSE() throws EstacionamientoException{
 		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder().withProhibicionDias(prefijoDiaActual).build();
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.buscarCadenaInicio("ABC", configuracionesIngreso.getValor())).thenReturn(Boolean.TRUE);
-		assertFalse(estacionamientoValidation.validarDiasIngresoVehiculo("ABC", configuracionesIngresoList));
+		exception.expect(EstacionamientoException.class);
+		exception.expectMessage("El veh\u00EDculo no esta autorizado para ingresar el dia de hoy.");
+		vigilante.validarDiasIngresoVehiculo("ABC", configuracionesIngresoList);
 	}
 	
 	@Test
-	public void validarIngresoVehiculoTipoValidacionFinalFALSE(){
+	public void validarIngresoVehiculoTipoValidacionFinalFALSE() throws EstacionamientoException{
 		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
 		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder()
 				.withProhibicionDias(prefijoDiaActual)
@@ -69,44 +84,11 @@ public class EstacionamientoValidationUnitTest {
 		configuracionesIngresoList.add(configuracionesIngreso);
 		PowerMockito.mockStatic(EstacionamientoUtils.class);
 		PowerMockito.when(EstacionamientoUtils.bucarCadenaFinal("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.TRUE);
-		assertFalse(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
+		exception.expect(EstacionamientoException.class);
+		exception.expectMessage("El veh\u00EDculo no esta autorizado para ingresar el dia de hoy.");
+		vigilante.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList);
 	}
-	
-	@Test
-	public void validarIngresoVehiculoTipoValidacionDiaSemanaDiferenteTRUE(){
-		String diaActual= "L";
-		if(new SimpleDateFormat("EEEE", Locale.US).format(new Date()).equals("Monday"))
-			diaActual="M";
-		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder().withProhibicionDias(diaActual).build();
-		configuracionesIngresoList.add(configuracionesIngreso);
-		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
-	}
-	
-	@Test
-	public void validarIngresoVehiculoTipoValidacionInicioTRUE(){
-		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
-		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder()
-				.withProhibicionDias(prefijoDiaActual)
-				.build();
-		configuracionesIngresoList.add(configuracionesIngreso);
-		PowerMockito.mockStatic(EstacionamientoUtils.class);
-		PowerMockito.when(EstacionamientoUtils.buscarCadenaInicio("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.FALSE);
-		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
-	}
-	
-	@Test
-	public void validarIngresoVehiculoTipoValidacionFinalTRUE(){
-		String prefijoDiaActual= asignacionPrefijoDia(new SimpleDateFormat("EEEE", Locale.US).format(new Date()));
-		configuracionesIngreso= new ConfiguracionesIngresoDataBuilder()
-				.withProhibicionDias(prefijoDiaActual)
-				.withTipoValidacion(TipoValidacion.FINAL)
-				.build();
-		configuracionesIngresoList.add(configuracionesIngreso);
-		PowerMockito.mockStatic(EstacionamientoUtils.class);
-		PowerMockito.when(EstacionamientoUtils.bucarCadenaFinal("CBA", configuracionesIngreso.getValor())).thenReturn(Boolean.FALSE);
-		assertTrue(estacionamientoValidation.validarDiasIngresoVehiculo("CBA", configuracionesIngresoList));
-	}	
-	
+			
 	private String asignacionPrefijoDia(String dia){
 		String prefijo= "";
 		switch (dia) {

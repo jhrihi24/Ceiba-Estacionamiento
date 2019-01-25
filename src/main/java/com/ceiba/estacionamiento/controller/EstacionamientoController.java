@@ -22,20 +22,18 @@ import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.exception.EstacionamientoException;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
-import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
+import com.ceiba.estacionamiento.validation.Vigilante;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/estacionamiento")
-public class EstacionamientoController extends AbstractController{
+public class EstacionamientoController {
 	
 	private EstacionamientoService estacionamientoService;
-	private EstacionamientoValidation estacionamientoValidation;
 		
 	@Autowired
-	public EstacionamientoController(EstacionamientoService estacionamientoService, EstacionamientoValidation estacionamientoValidation) {
+	public EstacionamientoController(EstacionamientoService estacionamientoService, Vigilante estacionamientoValidation) {
 		this.estacionamientoService = estacionamientoService;
-		this.estacionamientoValidation = estacionamientoValidation;
 	}
 	
 	@GetMapping
@@ -47,19 +45,16 @@ public class EstacionamientoController extends AbstractController{
 	
 	@PostMapping
 	public RespuestaDTO<String> registrarVehiculo(@RequestBody RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException{
-		RespuestaDTO<String> respuesta= estacionamientoValidation.validarCamposRegistroVehiculo(registrarVehiculo);
-		if(respuesta.isSuccess()){
-			estacionamientoService.registarVehiculo(registrarVehiculo);
-			respuesta.setMensaje("El veh\u00EDculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");
-		}		
+		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
+		estacionamientoService.registarVehiculo(registrarVehiculo);
+		respuesta.setMensaje("El veh\u00EDculo con la placa "+registrarVehiculo.getPlaca()+" ingresado con exito.");				
 		return respuesta;
 	}
 	
 	@PutMapping
 	public RespuestaDTO<String> salidaVehiculo(@RequestBody Map<String, Long> param) throws EstacionamientoException, RemoteException{
-		Date fechaActual= new Date();
 		RespuestaDTO<String> respuesta= new RespuestaDTO<>();
-		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), fechaActual);		
+		Servicios servicios= estacionamientoService.salidaVehiculo(param.get("idServicio"), new Date());		
 		respuesta.setMensaje("El total a pagar por el veh\u00EDculo con placa "+servicios.getPlaca()+" es: "+
 				NumberFormat.getCurrencyInstance(new Locale("es","CO")).format(servicios.getCobrado())+ 
 				" USD: "+NumberFormat.getCurrencyInstance(Locale.US).format(servicios.getCobradoUSD()));	

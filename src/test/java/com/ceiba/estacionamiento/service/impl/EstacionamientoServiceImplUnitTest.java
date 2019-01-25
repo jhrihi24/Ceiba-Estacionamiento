@@ -2,6 +2,8 @@ package com.ceiba.estacionamiento.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.any;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -17,6 +19,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -40,7 +43,7 @@ import com.ceiba.estacionamiento.repository.PreciosRepository;
 import com.ceiba.estacionamiento.repository.ServiciosRepository;
 import com.ceiba.estacionamiento.trm.TRMService;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
-import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
+import com.ceiba.estacionamiento.validation.Vigilante;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({EstacionamientoUtils.class})
@@ -65,7 +68,7 @@ public class EstacionamientoServiceImplUnitTest {
 	private TRMService trmService;
 	
 	@Mock
-	private EstacionamientoValidation estacionamientoValidation;
+	private Vigilante vigilante;
 		
 	@InjectMocks
 	private EstacionamientoServiceImpl estacionamientoServiceImpl;
@@ -88,8 +91,6 @@ public class EstacionamientoServiceImplUnitTest {
 		configuracionesCilindrajeList= new ArrayList<>();
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().build();
 		optionalServicios= Optional.of(new ServiciosDataBuilder().build());
-		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoMotos", 10);
-		ReflectionTestUtils.setField(estacionamientoServiceImpl, "maximoCarros", 20);
 	}
 		
 	@Test
@@ -119,67 +120,11 @@ public class EstacionamientoServiceImplUnitTest {
 		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
 		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(0L);
 		when(configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo)).thenReturn(configuracionesIngresoList);
-		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList)).thenReturn(Boolean.TRUE);		
+		Mockito.doNothing().when(vigilante).validarRegistroVehiculo(registrarVehiculo, tipoVehiculo, 0L, 0L);
+		Mockito.doNothing().when(vigilante).validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList);		
 		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);	
-	}
-	
-	@Test
-	public void registrarVehiculoPlacaConFormatoInvalido() throws EstacionamientoException{		
-		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("CBJ57C").build();
-		exception.expect(EstacionamientoException.class);
-		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
-	}
-	
-	@Test
-	public void registrarVehiculoPlacaDuplicada() throws EstacionamientoException{		
-		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(2);
-		PowerMockito.mockStatic(EstacionamientoUtils.class);
-		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(1L);
-		exception.expect(EstacionamientoException.class);
-		//exception.expectMessage("Ya se encuentra un vehiculo con esa placa en el estacionamiento.");
-		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
-	}
-	
-	@Test
-	public void registrarVehiculoSinCupoMoto() throws EstacionamientoException{
-		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withCilindraje(150).build();
-		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(1);
-		PowerMockito.mockStatic(EstacionamientoUtils.class);
-		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(10L);
-		exception.expect(EstacionamientoException.class);
-		//exception.expectMessage("No hay cupo para el vehiculo.");
-		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
-	}
-	
-	@Test
-	public void registrarVehiculoSinCupoCarro() throws EstacionamientoException{
-		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(2);
-		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withCilindraje(0).build();
-		PowerMockito.mockStatic(EstacionamientoUtils.class);
-		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(20L);
-		exception.expect(EstacionamientoException.class);
-		//exception.expectMessage("No hay cupo para el vehiculo.");
-		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
-	}
-	
-	@Test
-	public void registrarVehiculoDiasIngreso() throws EstacionamientoException{
-		List<ConfiguracionesIngreso> configuracionesIngresoList= new ArrayList<>();
-		TipoVehiculo tipoVehiculo= TipoVehiculo.toTipoVehiculo(1);		
-		PowerMockito.mockStatic(EstacionamientoUtils.class);
-		PowerMockito.when(EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)).thenReturn(Boolean.TRUE);
-		when(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())).thenReturn(0L);
-		when(serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo)).thenReturn(0L);
-		when(configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo)).thenReturn(configuracionesIngresoList);
-		when(estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoList)).thenReturn(Boolean.FALSE);		
-		exception.expect(EstacionamientoException.class);
-		//exception.expectMessage("El vehiculo no esta autorizado para ingresar el dia de hoy.");
-		estacionamientoServiceImpl.registarVehiculo(registrarVehiculo);
+		
+		verify(serviciosRepository).save(any(Servicios.class));
 	}
 	
 	@Test

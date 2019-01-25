@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +24,7 @@ import com.ceiba.estacionamiento.repository.ServiciosRepository;
 import com.ceiba.estacionamiento.service.EstacionamientoService;
 import com.ceiba.estacionamiento.trm.TRMService;
 import com.ceiba.estacionamiento.util.EstacionamientoUtils;
-import com.ceiba.estacionamiento.validation.EstacionamientoValidation;
+import com.ceiba.estacionamiento.validation.Vigilante;
 
 @Service
 public class EstacionamientoServiceImpl implements EstacionamientoService{
@@ -35,23 +34,17 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	private PreciosRepository preciosRepository;
 	private ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository;
 	private TRMService trmService;
-	private EstacionamientoValidation estacionamientoValidation;
-	
-	@Value("${maximo.motos}")
-	private Integer maximoMotos;
-	
-	@Value("${maximo.carros}")
-	private Integer maximoCarros;
-	
+	private Vigilante vigilante;
+			
 	@Autowired	
 	public EstacionamientoServiceImpl(ServiciosRepository serviciosRepository, ConfiguracionesIngresoRepository configuracionesIngresoRepository, 
-			TRMService trmWebService, PreciosRepository preciosRepository, EstacionamientoValidation estacionamientoValidation, 
+			TRMService trmWebService, PreciosRepository preciosRepository, Vigilante vigilante, 
 			ConfiguracionesCilindrajeRepository configuracionesCilindrajeRepository, TRMService trmService) {
 		this.serviciosRepository = serviciosRepository;
 		this.configuracionesIngresoRepository = configuracionesIngresoRepository;
 		this.preciosRepository = preciosRepository;
 		this.configuracionesCilindrajeRepository= configuracionesCilindrajeRepository;
-		this.estacionamientoValidation = estacionamientoValidation;
+		this.vigilante = vigilante;
 		this.trmService= trmService;
 	}
 	
@@ -67,20 +60,11 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 	@Transactional
 	public void registarVehiculo(RegistrarVehiculoDTO registrarVehiculo) throws EstacionamientoException {
 		TipoVehiculo tipoVehiculo= registrarVehiculo.getCilindraje()==0 ? TipoVehiculo.CARRO: TipoVehiculo.MOTO;
-		if(!EstacionamientoUtils.validarPlacaValida(registrarVehiculo.getPlaca(), tipoVehiculo)){
-			throw new EstacionamientoException("La placa ingresada no cuenta con el formato valido.");
-		}		
-		if(serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca())>0){
-			throw new EstacionamientoException("Ya se encuentra un veh\u00EDculo con esa placa en el estacionamiento.");
-		}		
-		Long vehiculosIngresados= serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo);
-		if((tipoVehiculo.equals(TipoVehiculo.CARRO) && vehiculosIngresados.intValue()==maximoCarros) || 
-				(tipoVehiculo.equals(TipoVehiculo.MOTO) && vehiculosIngresados.intValue()==maximoMotos)){
-			throw new EstacionamientoException("No hay cupo para el veh\u00EDculo.");
-		}
-		if(!estacionamientoValidation.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo))){
-			throw new EstacionamientoException("El veh\u00EDculo no esta autorizado para ingresar el dia de hoy.");
-		}		
+		vigilante.validarRegistroVehiculo(registrarVehiculo, tipoVehiculo, 
+				serviciosRepository.countByPlacaActivos(registrarVehiculo.getPlaca()), 
+				serviciosRepository.countByVehiculoIngresadoActivos(tipoVehiculo));						
+		vigilante.validarDiasIngresoVehiculo(registrarVehiculo.getPlaca(), 
+				configuracionesIngresoRepository.findByTipoVehiculo(tipoVehiculo));		
 		
 		Servicios servicios= new Servicios();
 				
@@ -99,32 +83,11 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 			throw new EstacionamientoException("El servicio no existe.");
 		}		
 		
-		//Realizacion del cobro normal
-		Long cantidadHoras= EstacionamientoUtils.calcularHorasEntreFechas(optionalServicios.get().getFechaHoraIngreso(), fechaActual);
-		List<Precios> preciosList= preciosRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo());
-		BigDecimal cobroTotal= new BigDecimal(0);
-		for(Precios precio: preciosList){
-			if(precio.getTipoCobro()==TipoCobro.DIA && cantidadHoras > 24){
-				cobroTotal= cobroTotal.add(EstacionamientoUtils.cobroDia(precio.getPrecio(), cantidadHoras));
-			}else if(precio.getTipoCobro()==TipoCobro.HORA){
-				cobroTotal= cobroTotal.add(EstacionamientoUtils.cobroHora(precio.getPrecio(), cantidadHoras));
-			}
-		}
-		
-		//Realizacion del cobro adicional
-		if(optionalServicios.get().getCilindraje()>0){
-			Integer mayorCilindraje=0;
-			BigDecimal cobroAdicional= new BigDecimal(0);
-			List<ConfiguracionesCilindraje> configuracionesCilindrajeList= configuracionesCilindrajeRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo());
-			for(ConfiguracionesCilindraje configuracionesCilindraje: configuracionesCilindrajeList){
-				if(optionalServicios.get().getCilindraje()>configuracionesCilindraje.getCilindraje() && 
-						configuracionesCilindraje.getCilindraje()>mayorCilindraje){
-					mayorCilindraje= configuracionesCilindraje.getCilindraje();
-					cobroAdicional= configuracionesCilindraje.getCobroAdicional();
-				}
-			}
-			
-			cobroTotal= cobroTotal.add(cobroAdicional);
+		BigDecimal cobroTotal= calcularCobroVehiculo(preciosRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo()), 
+				EstacionamientoUtils.calcularHorasEntreFechas(optionalServicios.get().getFechaHoraIngreso(), fechaActual));				
+		if(optionalServicios.get().getCilindraje()>0){		
+			cobroTotal= cobroTotal.add(calcularCobroAdicionalVehiculo(configuracionesCilindrajeRepository.findByTipoVehiculo(optionalServicios.get().getTipoVehiculo()), 
+					optionalServicios.get().getCilindraje()));
 		}			
 		
 		Servicios servicios= optionalServicios.get();
@@ -134,5 +97,32 @@ public class EstacionamientoServiceImpl implements EstacionamientoService{
 		servicios.setCobradoUSD(EstacionamientoUtils.cobroTRM(cobroTotal, trmService.getTrm()));
 		
 		return serviciosRepository.save(servicios);
-	}	
+	}
+	
+	private BigDecimal calcularCobroVehiculo(List<Precios> preciosList, Long cantidadHoras){
+		BigDecimal cobro= new BigDecimal(0);
+		for(Precios precio: preciosList){
+			if(precio.getTipoCobro()==TipoCobro.DIA && cantidadHoras > 24){
+				cobro= cobro.add(EstacionamientoUtils.cobroDia(precio.getPrecio(), cantidadHoras));
+			}else if(precio.getTipoCobro()==TipoCobro.HORA){
+				cobro= cobro.add(EstacionamientoUtils.cobroHora(precio.getPrecio(), cantidadHoras));
+			}
+		}
+		
+		return cobro;
+	}
+	
+	private BigDecimal calcularCobroAdicionalVehiculo(List<ConfiguracionesCilindraje> configuracionesCilindrajeList, Integer cilindraje){
+		Integer mayorCilindraje=0;
+		BigDecimal cobroAdicional= new BigDecimal(0);		
+		for(ConfiguracionesCilindraje configuracionesCilindraje: configuracionesCilindrajeList){
+			if(cilindraje > configuracionesCilindraje.getCilindraje() && 
+					configuracionesCilindraje.getCilindraje()>mayorCilindraje){
+				mayorCilindraje= configuracionesCilindraje.getCilindraje();
+				cobroAdicional= configuracionesCilindraje.getCobroAdicional();
+			}
+		}
+		
+		return cobroAdicional;
+	}
 }

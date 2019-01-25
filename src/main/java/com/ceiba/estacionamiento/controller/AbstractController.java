@@ -1,6 +1,6 @@
 package com.ceiba.estacionamiento.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
@@ -12,7 +12,7 @@ import com.ceiba.estacionamiento.exception.EstacionamientoException;
  * @author dromeroa
  *
  */
-@Controller()
+@ControllerAdvice
 public class AbstractController {	
 			
 	@ExceptionHandler(value=Exception.class )

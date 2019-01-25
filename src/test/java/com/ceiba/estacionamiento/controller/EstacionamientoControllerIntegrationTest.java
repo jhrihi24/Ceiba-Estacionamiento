@@ -24,12 +24,12 @@ import com.ceiba.estacionamiento.dto.RegistrarVehiculoDTO;
 import com.ceiba.estacionamiento.dto.RespuestaDTO;
 import com.ceiba.estacionamiento.exception.EstacionamientoException;
 
-/*@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)*/
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EstacionamientoControllerIntegrationTest {
 	
-	/*@Rule
+	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 	
 	@Autowired
@@ -60,13 +60,13 @@ public class EstacionamientoControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testCRegistrarVehiculoPlacaSinIngresar() throws EstacionamientoException{
+	public void testCRegistrarVehiculoPlacaSinIngresar() throws EstacionamientoException{		
 		registrarVehiculo= new RegistrarVehiculoDTODataBuilder().withPlaca("").build();
-		RespuestaDTO<String> respuestaDTO= estacionamientoController.registrarVehiculo(registrarVehiculo);
-		assertFalse(respuestaDTO.isSuccess());
-		assertEquals("Debe ingresar una placa", respuestaDTO.getMensaje());
+		exception.expect(EstacionamientoException.class);
+		//exception.expectMessage("Debe ingresar una placa");
+		estacionamientoController.registrarVehiculo(registrarVehiculo);
 	}
-	
+			
 	@Test
 	public void testDGetServiciosActivosSinPlaca(){
 		assertEquals(1, estacionamientoController.getServiciosActivos(null).getData().size());
@@ -90,6 +90,17 @@ public class EstacionamientoControllerIntegrationTest {
 		param.put("idServicio", 1L);
 		RespuestaDTO<String> respuestaDTO= estacionamientoController.salidaVehiculo(param);
 		assertTrue(respuestaDTO.isSuccess());
-	}*/
+	}
+			
+	@Test
+	public void testMRegistrarVehiculoCupoMotos() throws EstacionamientoException{
+		for(Integer i=0; i<10; i++){
+			String indiceNumero= i<10 ? "0"+i : i.toString();
+			estacionamientoController.registrarVehiculo(new RegistrarVehiculoDTODataBuilder().withPlaca("TRS"+indiceNumero+"C").withCilindraje(600).build());
+		}
+		exception.expect(EstacionamientoException.class);
+		//exception.expectMessage("No hay cupo para el veh\u00EDculo.");
+		estacionamientoController.registrarVehiculo(new RegistrarVehiculoDTODataBuilder().withPlaca("TRS21C").withCilindraje(600).build());
+	}
 		
 }
